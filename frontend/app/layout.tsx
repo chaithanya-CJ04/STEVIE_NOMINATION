@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Stevie Awards Recommendation System",
   description: "Find your perfect Stevie Award with an AI-guided conversation.",
+  icons: {
+    icon: "/stevies-logo.ico",
+  },
 };
 
 export default function RootLayout({
