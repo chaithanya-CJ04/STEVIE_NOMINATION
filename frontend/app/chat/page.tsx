@@ -84,18 +84,24 @@ export default function ChatPage() {
 
         setSessionId(start.session_id);
         setConversationState(start.conversation_state);
-        setMessages([
-          {
+
+        const initialMessages: ChatMessage[] = [];
+        if (start.message) {
+          initialMessages.push({
             id: "intro",
             role: "assistant",
             content: start.message,
-          },
-          {
+          });
+        }
+        if (start.question) {
+          initialMessages.push({
             id: "q1",
             role: "assistant",
             content: start.question,
-          },
-        ]);
+          });
+        }
+
+        setMessages(initialMessages);
       } catch (err: any) {
         if (!mounted) return;
         setError(
@@ -224,10 +230,24 @@ export default function ChatPage() {
       const start = await startConversation(token, userId);
       setSessionId(start.session_id);
       setConversationState(start.conversation_state);
-      setMessages([
-        { id: "intro", role: "assistant", content: start.message },
-        { id: "q1", role: "assistant", content: start.question },
-      ]);
+
+      const initialMessages: ChatMessage[] = [];
+      if (start.message) {
+        initialMessages.push({
+          id: "intro",
+          role: "assistant",
+          content: start.message,
+        });
+      }
+      if (start.question) {
+        initialMessages.push({
+          id: "q1",
+          role: "assistant",
+          content: start.question,
+        });
+      }
+
+      setMessages(initialMessages);
     } catch (err: any) {
       setError(
         err?.message ??
