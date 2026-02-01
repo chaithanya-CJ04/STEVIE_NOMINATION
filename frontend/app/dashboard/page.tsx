@@ -45,7 +45,7 @@ export default function DashboardPage() {
   return (
     <div className="flex h-full flex-col gap-8 md:flex-row md:items-stretch">
       {/* Middle section: Coming soon */}
-      <section className="flex h-full flex-1 rounded-[32px] border border-zinc-800/70 bg-black/80 px-10 py-12 text-zinc-100 shadow-[0_0_60px_rgba(0,0,0,0.9)]">
+      <section className="flex h-full flex-1 min-h-[420px] rounded-[32px] border border-zinc-800/70 bg-black/80 px-10 py-12 text-zinc-100 shadow-[0_0_60px_rgba(0,0,0,0.9)]">
         <div className="m-auto flex max-w-xl flex-col items-center justify-center gap-5 text-center">
           <span className="rounded-full border border-zinc-700/70 bg-zinc-900/80 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-400">
             Dashboard
@@ -61,7 +61,7 @@ export default function DashboardPage() {
       </section>
 
       {/* Right section: Q&A chatbot */}
-      <aside className="flex h-full w-full max-w-md rounded-3xl border border-amber-400/50 bg-zinc-950/90 p-5 text-zinc-100 shadow-[0_0_55px_rgba(251,191,36,0.55)] md:w-80">
+      <aside className="flex h-full w-full max-w-md min-h-[420px] rounded-3xl border border-amber-400/50 bg-zinc-950/90 p-5 text-zinc-100 shadow-[0_0_55px_rgba(251,191,36,0.55)] md:w-80">
         <div className="flex h-full w-full flex-col">
         <header className="mb-4 flex items-center justify-between gap-3">
           <div>
