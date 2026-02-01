@@ -29,6 +29,22 @@ export async function getUserProfile(token: string): Promise<UserProfile> {
     },
   });
 
+  if (res.status === 404) {
+    let message = "PROFILE_NOT_FOUND";
+    try {
+      const body = await res.json();
+      if (typeof body?.message === "string") {
+        message = "PROFILE_NOT_FOUND";
+      }
+    } catch {
+      // ignore JSON parse errors and use default message
+    }
+
+    const err: any = new Error(message);
+    err.code = "PROFILE_NOT_FOUND";
+    throw err;
+  }
+
   const data = await handleJson<{ success: boolean; user: UserProfile }>(res);
   return data.user;
 }
@@ -86,7 +102,7 @@ export async function sendConversationResponse(
     body: JSON.stringify({
       session_id: params.sessionId,
       user_id: params.userId,
-      message: params.message,
+      user_message: params.message,
     }),
   });
   const json = await handleJson<any>(res);

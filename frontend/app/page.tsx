@@ -60,6 +60,11 @@ export default function Home() {
         router.push("/chat");
       }
     } catch (err: any) {
+      if (err?.code === "PROFILE_NOT_FOUND" || err?.message === "PROFILE_NOT_FOUND") {
+        router.push("/onboarding");
+        return;
+      }
+
       setError(err?.message ?? "Something went wrong. Please try again.");
     } finally {
       setLoadingAction(false);
