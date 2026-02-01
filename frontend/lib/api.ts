@@ -68,7 +68,9 @@ export async function startConversation(
     body: JSON.stringify({ user_id: userId }),
   });
 
-  return handleJson<ConversationStartResponse>(res);
+  const json = await handleJson<any>(res);
+  const data = json.data ?? json;
+  return data as ConversationStartResponse;
 }
 
 export async function sendConversationResponse(
@@ -87,12 +89,12 @@ export async function sendConversationResponse(
       message: params.message,
     }),
   });
-
   const json = await handleJson<any>(res);
+  const data = json.data ?? json;
 
   return {
-    ...json,
-    recommendations: json.recommendations ?? json.total_recommendations,
-    total_matches: json.total_matches ?? json.matches,
+    ...data,
+    recommendations: data.recommendations ?? data.total_recommendations,
+    total_matches: data.total_matches ?? data.matches,
   } as ConversationRespondResponse;
 }
