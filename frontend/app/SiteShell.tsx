@@ -15,6 +15,7 @@ export function SiteShell({ children }: SiteShellProps) {
 
   const showChrome = pathname !== "/auth";
   const isChatRoute = pathname.startsWith("/chat");
+  const isDashboardRoute = pathname.startsWith("/dashboard");
 
   const handleLogout = async () => {
     try {
@@ -46,7 +47,7 @@ export function SiteShell({ children }: SiteShellProps) {
       )}
 
       <div className="mx-auto flex max-w-5xl px-4 pb-10 pt-6">
-        {showChrome && isChatRoute && (
+        {showChrome && (isChatRoute || isDashboardRoute) && (
           <aside className="mr-4 hidden w-52 flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
             <div className="space-y-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">
