@@ -116,6 +116,14 @@ export default function ChatPage() {
     };
   }, [router]);
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+    } finally {
+      router.replace("/auth");
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!input.trim() || !sessionId || !userId || loadingReply) return;
@@ -241,7 +249,41 @@ export default function ChatPage() {
   const isComplete = conversationState === "complete";
 
   return (
-    <main className="flex min-h-screen flex-col px-4 py-6 text-zinc-50 sm:px-6 sm:py-8">
+    <main className="flex min-h-screen px-4 py-6 text-zinc-50 sm:px-6 sm:py-8">
+      {/* Sidebar navigation */}
+      <aside className="mr-4 hidden w-52 flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
+        <div className="space-y-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">
+            Navigation
+          </p>
+          <nav className="space-y-2">
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              className="flex w-full items-center justify-between rounded-full border border-transparent px-3 py-2 text-left text-xs font-medium uppercase tracking-[0.16em] text-zinc-300 transition hover:border-amber-400 hover:text-amber-300"
+            >
+              <span>Dashboard</span>
+            </button>
+            <button
+              type="button"
+              disabled
+              className="flex w-full items-center justify-between rounded-full border border-amber-500/70 bg-amber-500/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-[0.16em] text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)]"
+            >
+              <span>Chatbot</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            </button>
+          </nav>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="mt-6 flex w-full items-center justify-between rounded-full border border-zinc-700/80 px-3 py-2 text-left text-xs font-medium uppercase tracking-[0.16em] text-zinc-300 transition hover:border-red-500 hover:text-red-300"
+        >
+          <span>Logout</span>
+        </button>
+      </aside>
+
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col rounded-3xl border border-zinc-800/70 bg-black/70 shadow-[0_0_60px_rgba(0,0,0,0.9)] backdrop-blur-lg">
         <header className="flex items-center justify-between gap-4 border-b border-zinc-800/80 px-5 py-4 sm:px-8">
           <div>
@@ -254,25 +296,6 @@ export default function ChatPage() {
           </div>
 
           <div className="flex items-center gap-4 text-xs text-zinc-400">
-            {progress && (
-              <div className="hidden items-center gap-2 sm:flex">
-                <span className="text-[11px] uppercase tracking-[0.16em] text-zinc-500">
-                  Question {progress.current} of {progress.total}
-                </span>
-                <div className="h-1 w-32 overflow-hidden rounded-full bg-zinc-800">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-400"
-                    style={{
-                      width: `${Math.min(
-                        100,
-                        (progress.current / progress.total) * 100,
-                      )}%`,
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-
             <button
               type="button"
               onClick={handleStartOver}
@@ -282,12 +305,6 @@ export default function ChatPage() {
             </button>
           </div>
         </header>
-
-        {progress && (
-          <div className="block border-b border-zinc-800/80 px-5 py-2 text-center text-[11px] text-zinc-400 sm:hidden">
-            Question {progress.current} of {progress.total}
-          </div>
-        )}
 
         {error && (
           <div className="mx-5 mt-3 rounded-2xl border border-red-500/40 bg-red-950/40 px-4 py-2 text-xs text-red-200 sm:mx-8">
