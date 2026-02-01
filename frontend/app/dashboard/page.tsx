@@ -43,7 +43,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="flex h-full flex-col gap-8 md:flex-row">
+    <div className="flex h-full flex-col gap-8 md:flex-row md:items-stretch">
       {/* Middle section: Coming soon */}
       <section className="flex h-full flex-1 rounded-[32px] border border-zinc-800/70 bg-black/80 px-10 py-12 text-zinc-100 shadow-[0_0_60px_rgba(0,0,0,0.9)]">
         <div className="m-auto flex max-w-xl flex-col items-center justify-center gap-5 text-center">
@@ -61,8 +61,8 @@ export default function DashboardPage() {
       </section>
 
       {/* Right section: Q&A chatbot */}
-      <aside className="mt-2 flex h-full w-full max-w-md rounded-3xl border border-amber-400/50 bg-zinc-950/90 p-5 text-zinc-100 shadow-[0_0_55px_rgba(251,191,36,0.55)] md:mt-0 md:w-80">
-        <div className="flex w-full flex-col">
+      <aside className="flex h-full w-full max-w-md rounded-3xl border border-amber-400/50 bg-zinc-950/90 p-5 text-zinc-100 shadow-[0_0_55px_rgba(251,191,36,0.55)] md:w-80">
+        <div className="flex h-full w-full flex-col">
         <header className="mb-4 flex items-center justify-between gap-3">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-300">
@@ -75,7 +75,7 @@ export default function DashboardPage() {
           <span className="h-2 w-2 rounded-full bg-emerald-400" />
         </header>
 
-        <div className="mb-4 max-h-72 flex-1 space-y-2 overflow-y-auto pr-1 text-[12px]">
+        <div className="mb-4 flex-1 space-y-2 overflow-y-auto pr-1 text-[12px]">
           {messages.map((m) => (
             <div
               key={m.id}
@@ -90,7 +90,7 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-1.5 flex items-center gap-2">
+        <form onSubmit={handleSubmit} className="mt-auto flex items-center gap-2">
           <input
             type="text"
             value={input}
