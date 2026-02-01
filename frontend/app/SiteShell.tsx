@@ -29,7 +29,7 @@ export function SiteShell({ children }: SiteShellProps) {
     <div className="min-h-screen bg-linear-to-b from-black via-zinc-950 to-black">
       {showChrome && (
         <header className="w-full border-b border-zinc-800/60 bg-black/60 backdrop-blur-sm">
-          <div className="mx-auto max-w-5xl px-4 py-3 flex items-center gap-3">
+          <div className="mx-auto max-w-6xl px-6 py-4 flex items-center gap-4">
             <Image
               src="/stevie-awards-banner.png"
               alt="Stevie Awards Banner"
@@ -39,14 +39,14 @@ export function SiteShell({ children }: SiteShellProps) {
               priority
               unoptimized
             />
-            <span className="text-sm font-medium text-zinc-200 tracking-wide">
+            <span className="text-base font-medium text-zinc-200 tracking-wide">
               Stevie Awards Recommendation System
             </span>
           </div>
         </header>
       )}
 
-      <div className="mx-auto flex max-w-5xl px-4 pb-10 pt-6">
+      <div className="mx-auto flex max-w-6xl px-6 pb-12 pt-8">
         {showChrome && (isChatRoute || isDashboardRoute) && (
           <aside className="mr-4 hidden w-52 flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
             <div className="space-y-4">
