@@ -54,15 +54,22 @@ export function SiteShell({ children }: SiteShellProps) {
                 Navigation
               </p>
               <nav className="space-y-2">
-                {/* Dashboard tab - disabled, coming soon */}
+                {/* Dashboard tab */}
                 <button
                   type="button"
-                  disabled
-                  title="Coming soon"
-                  className="flex w-full items-center justify-between rounded-full border border-zinc-700/60 bg-zinc-900/60 px-3 py-2 text-left text-xs font-medium uppercase tracking-[0.16em] text-zinc-500 cursor-not-allowed"
+                  onClick={() => {
+                    if (!isDashboardRoute) router.push("/dashboard");
+                  }}
+                  className={`flex w-full items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition ${
+                    isDashboardRoute
+                      ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)]"
+                      : "border border-transparent font-medium text-zinc-300 hover:border-amber-400 hover:text-amber-300"
+                  }`}
                 >
                   <span>Dashboard</span>
-                  <span className="text-[10px] uppercase text-zinc-500">Soon</span>
+                  {isDashboardRoute && (
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  )}
                 </button>
 
                 {/* Chatbot tab */}
