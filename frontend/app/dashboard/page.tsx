@@ -1,12 +1,17 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 interface QaMessage {
   id: string;
   role: "assistant" | "user";
   content: string;
 }
+
+type QaMetadata = {
+  confidence?: string;
+  sources?: unknown[];
+};
 
 export default function DashboardPage() {
   const [messages, setMessages] = useState<QaMessage[]>([
@@ -18,11 +23,33 @@ export default function DashboardPage() {
     },
   ]);
   const [input, setInput] = useState("");
+  const [loadingReply, setLoadingReply] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [metadata, setMetadata] = useState<QaMetadata | null>(null);
+  const streamAbortRef = useRef<AbortController | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages, loadingReply]);
+
+  useEffect(() => {
+    return () => {
+      streamAbortRef.current?.abort();
+    };
+  }, []);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
-    if (!trimmed) return;
+    if (!trimmed || loadingReply) return;
+
+    setError(null);
+    setMetadata(null);
+    streamAbortRef.current?.abort();
+    const controller = new AbortController();
+    streamAbortRef.current = controller;
 
     const userMsg: QaMessage = {
       id: `u-${Date.now()}`,
@@ -30,16 +57,121 @@ export default function DashboardPage() {
       content: trimmed,
     };
 
-    // For now, echo-style placeholder until wired to real Q&A backend
+    const replyId = `a-${Date.now()}`;
     const reply: QaMessage = {
-      id: `a-${Date.now()}`,
+      id: replyId,
       role: "assistant",
-      content:
-        "Thanks for your question. The dedicated Q&A assistant is coming soon – this is just a preview shell.",
+      content: "",
     };
 
     setMessages((prev) => [...prev, userMsg, reply]);
     setInput("");
+
+    setLoadingReply(true);
+    try {
+      const res = await fetch("/api/chatbot/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "text/event-stream",
+        },
+        body: JSON.stringify({ question: trimmed }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok || !res.body) {
+        const text = await res.text().catch(() => "");
+        throw new Error(text || `Request failed (${res.status})`);
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      const appendToReply = (delta: string) => {
+        if (!delta) return;
+        setMessages((prev) =>
+          prev.map((m) => (m.id === replyId ? { ...m, content: m.content + delta } : m)),
+        );
+      };
+
+      const setReplyText = (text: string) => {
+        setMessages((prev) =>
+          prev.map((m) => (m.id === replyId ? { ...m, content: text } : m)),
+        );
+      };
+
+      let done = false;
+
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        if (readerDone) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        const parts = buffer.split("\n\n");
+        buffer = parts.pop() ?? "";
+
+        for (const part of parts) {
+          const lines = part
+            .split("\n")
+            .map((l) => l.trim())
+            .filter(Boolean);
+
+          const dataLines = lines
+            .filter((l) => l.startsWith("data:"))
+            .map((l) => l.slice(5).trim());
+
+          if (dataLines.length === 0) continue;
+          const dataStr = dataLines.join("\n");
+
+          let payload: any;
+          try {
+            payload = JSON.parse(dataStr);
+          } catch {
+            continue;
+          }
+
+          if (payload?.type === "metadata") {
+            setMetadata({
+              confidence:
+                typeof payload?.confidence === "string" ? payload.confidence : undefined,
+              sources: Array.isArray(payload?.sources) ? payload.sources : undefined,
+            });
+          } else if (payload?.type === "chunk") {
+            const content = typeof payload?.content === "string" ? payload.content : "";
+            appendToReply(content);
+          } else if (payload?.type === "error") {
+            const message =
+              typeof payload?.message === "string"
+                ? payload.message
+                : "Failed to generate answer";
+            setError(message);
+            if (!controller.signal.aborted) {
+              setReplyText(message);
+            }
+            done = true;
+          } else if (payload?.type === "done") {
+            done = true;
+          }
+        }
+      }
+    } catch (err: any) {
+      if (err?.name === "AbortError") return;
+      setError(err?.message ?? "Failed to generate answer");
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.role === "assistant" && m.content === ""
+            ? { ...m, content: err?.message ?? "Failed to generate answer" }
+            : m,
+        ),
+      );
+    } finally {
+      setLoadingReply(false);
+      if (streamAbortRef.current === controller) {
+        streamAbortRef.current = null;
+      }
+    }
   };
 
   return (
@@ -75,7 +207,13 @@ export default function DashboardPage() {
           <span className="h-2 w-2 rounded-full bg-emerald-400" />
         </header>
 
-        <div className="mb-4 flex-1 space-y-2 overflow-y-auto pr-1 text-[12px]">
+        {metadata?.confidence && (
+          <div className="mb-3 text-[11px] text-zinc-400">
+            Confidence: <span className="text-zinc-200">{metadata.confidence}</span>
+          </div>
+        )}
+
+        <div ref={scrollRef} className="mb-4 flex-1 space-y-2 overflow-y-auto pr-1 text-[12px]">
           {messages.map((m) => (
             <div
               key={m.id}
@@ -96,16 +234,21 @@ export default function DashboardPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask a question..."
+            disabled={loadingReply}
             className="flex-1 rounded-full border border-zinc-700/70 bg-zinc-950 px-3.5 py-2 text-[12px] text-zinc-100 placeholder:text-zinc-500 focus:border-amber-400 focus:outline-none"
           />
           <button
             type="submit"
-            disabled={!input.trim()}
+            disabled={!input.trim() || loadingReply}
             className="rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-black disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Send
+            {loadingReply ? "..." : "Send"}
           </button>
         </form>
+
+        {error && (
+          <p className="mt-3 text-[11px] text-red-300">{error}</p>
+        )}
         </div>
       </aside>
     </div>
