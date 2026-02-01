@@ -46,7 +46,7 @@ export function SiteShell({ children }: SiteShellProps) {
         </header>
       )}
 
-      <div className="mx-auto flex max-w-6xl px-6 pb-12 pt-8 min-h-[calc(100vh-96px)] items-stretch">
+      <div className="mx-auto flex max-w-6xl px-6 pb-12 pt-8 h-[calc(100vh-96px)] min-h-[calc(100vh-96px)] items-stretch">
         {showChrome && (isChatRoute || isDashboardRoute) && (
           <aside className="mr-4 hidden h-full w-52 min-h-[420px] flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
             <div className="space-y-4">
@@ -102,7 +102,7 @@ export function SiteShell({ children }: SiteShellProps) {
           </aside>
         )}
 
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 h-full">{children}</main>
       </div>
     </div>
   );
