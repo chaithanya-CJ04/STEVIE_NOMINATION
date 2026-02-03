@@ -10,6 +10,14 @@ import { supabase } from "@/lib/supabaseClient";
 export default function AuthPage() {
   const router = useRouter();
 
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    (typeof window === "undefined" ? undefined : window.location.origin);
+
+  const redirectTo = baseUrl
+    ? `${baseUrl.replace(/\/$/, "")}/auth/callback`
+    : undefined;
+
   useEffect(() => {
     let mounted = true;
 
@@ -68,6 +76,7 @@ export default function AuthPage() {
         <div className="rounded-2xl border border-zinc-800/80 bg-zinc-950/70 px-3 py-4">
           <Auth
             supabaseClient={supabase}
+            redirectTo={redirectTo}
             appearance={{
               theme: ThemeSupa,
               variables: {
