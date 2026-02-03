@@ -234,7 +234,7 @@ export default function OnboardingPage() {
       };
 
       await completeUserProfile(token, payload);
-      router.push("/chat");
+      router.push("/dashboard");
     } catch (err: any) {
       setError(err?.message ?? "Unable to save your profile. Please try again.");
     } finally {

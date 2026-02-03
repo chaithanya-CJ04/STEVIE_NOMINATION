@@ -47,7 +47,7 @@ export function SiteShell({ children }: SiteShellProps) {
       )}
 
       <div className="mx-auto flex max-w-6xl px-6 pb-12 pt-8 h-[calc(100vh-96px)] min-h-[calc(100vh-96px)] items-stretch">
-        {showChrome && (isChatRoute || isDashboardRoute) && (
+        {showChrome && isDashboardRoute && (
           <aside className="mr-4 hidden h-full w-52 min-h-[420px] flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
             <div className="space-y-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">
@@ -60,34 +60,10 @@ export function SiteShell({ children }: SiteShellProps) {
                   onClick={() => {
                     if (!isDashboardRoute) router.push("/dashboard");
                   }}
-                  className={`flex w-full items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition ${
-                    isDashboardRoute
-                      ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)]"
-                      : "border border-transparent font-medium text-zinc-300 hover:border-amber-400 hover:text-amber-300"
-                  }`}
+                  className="flex w-full items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)]"
                 >
                   <span>Dashboard</span>
-                  {isDashboardRoute && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  )}
-                </button>
-
-                {/* Chatbot tab */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!isChatRoute) router.push("/chat");
-                  }}
-                  className={`flex w-full items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition ${
-                    isChatRoute
-                      ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)]"
-                      : "border border-transparent font-medium text-zinc-300 hover:border-amber-400 hover:text-amber-300"
-                  }`}
-                >
-                  <span>Chatbot</span>
-                  {isChatRoute && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  )}
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 </button>
               </nav>
             </div>

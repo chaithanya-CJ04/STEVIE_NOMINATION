@@ -1,25 +1,29 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 interface QaMessage {
   id: string;
   role: "assistant" | "user";
   content: string;
+  recommendations?: any[]; // Add recommendations field
 }
 
 type QaMetadata = {
+  intent?: string;
   confidence?: string;
   sources?: unknown[];
 };
 
 export default function DashboardPage() {
+  const [sessionId, setSessionId] = useState<string>("");
   const [messages, setMessages] = useState<QaMessage[]>([
     {
       id: "welcome",
       role: "assistant",
       content:
-        "Hi! This space is for quick Q&A about your Stevie nominations. Ask me anything.",
+        "Hi! I'm your Stevie Awards assistant. I can answer questions or help you find the right category. What would you like to know?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -28,6 +32,16 @@ export default function DashboardPage() {
   const [metadata, setMetadata] = useState<QaMetadata | null>(null);
   const streamAbortRef = useRef<AbortController | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Generate a proper UUID v4 for this chat session
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+    setSessionId(uuid);
+  }, []);
 
   useEffect(() => {
     if (!scrollRef.current) return;
@@ -43,7 +57,7 @@ export default function DashboardPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
-    if (!trimmed || loadingReply) return;
+    if (!trimmed || loadingReply || !sessionId) return;
 
     setError(null);
     setMetadata(null);
@@ -69,13 +83,23 @@ export default function DashboardPage() {
 
     setLoadingReply(true);
     try {
-      const res = await fetch("/api/chatbot/ask", {
+      const { data } = await supabase.auth.getSession();
+      const session = data.session;
+      if (!session) {
+        throw new Error("Not authenticated");
+      }
+
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "text/event-stream",
+          Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ question: trimmed }),
+        body: JSON.stringify({ 
+          session_id: sessionId,
+          message: trimmed 
+        }),
         signal: controller.signal,
       });
 
@@ -132,15 +156,37 @@ export default function DashboardPage() {
             continue;
           }
 
-          if (payload?.type === "metadata") {
-            setMetadata({
-              confidence:
-                typeof payload?.confidence === "string" ? payload.confidence : undefined,
-              sources: Array.isArray(payload?.sources) ? payload.sources : undefined,
-            });
+          if (payload?.type === "intent") {
+            setMetadata((prev) => ({
+              ...prev,
+              intent: typeof payload?.intent === "string" ? payload.intent : undefined,
+            }));
           } else if (payload?.type === "chunk") {
             const content = typeof payload?.content === "string" ? payload.content : "";
             appendToReply(content);
+          } else if (payload?.type === "status") {
+            // Status message (e.g., "Generating recommendations...")
+            const message = typeof payload?.message === "string" ? payload.message : "";
+            if (message) {
+              appendToReply(`\n\n${message}\n\n`);
+            }
+          } else if (payload?.type === "recommendations") {
+            // Recommendations received - store them separately
+            const recs = payload?.data || [];
+            const count = payload?.count || recs.length;
+            
+            if (count > 0) {
+              // Add recommendations to the reply message
+              setMessages((prev) =>
+                prev.map((m) => 
+                  m.id === replyId 
+                    ? { ...m, recommendations: recs }
+                    : m
+                ),
+              );
+            } else {
+              appendToReply("\n\nI couldn't find matching categories. Could you provide more details about your achievement?\n");
+            }
           } else if (payload?.type === "error") {
             const message =
               typeof payload?.message === "string"
@@ -198,32 +244,79 @@ export default function DashboardPage() {
         <header className="mb-4 flex items-center justify-between gap-3">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-300">
-              Q&A Chatbot
+              AI Assistant
             </p>
             <p className="text-xs text-zinc-400">
-              Ask quick questions about awards and nominations.
+              Ask questions or get help finding the right category.
             </p>
           </div>
           <span className="h-2 w-2 rounded-full bg-emerald-400" />
         </header>
 
-        {metadata?.confidence && (
+        {metadata?.intent && (
           <div className="mb-3 text-[11px] text-zinc-400">
-            Confidence: <span className="text-zinc-200">{metadata.confidence}</span>
+            Intent: <span className="text-zinc-200 capitalize">{metadata.intent}</span>
           </div>
         )}
 
         <div ref={scrollRef} className="mb-4 flex-1 space-y-2 overflow-y-auto pr-1 text-[12px]">
           {messages.map((m) => (
-            <div
-              key={m.id}
-              className={
-                m.role === "assistant"
-                  ? "max-w-[85%] rounded-2xl bg-zinc-900 px-3 py-2 text-zinc-100"
-                  : "ml-auto max-w-[85%] rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 text-black"
-              }
-            >
-              {m.content}
+            <div key={m.id}>
+              <div
+                className={
+                  m.role === "assistant"
+                    ? "max-w-[85%] rounded-2xl bg-zinc-900 px-3 py-2 text-zinc-100"
+                    : "ml-auto max-w-[85%] rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 text-black"
+                }
+              >
+                {m.content}
+              </div>
+              
+              {/* Recommendation Cards */}
+              {m.recommendations && m.recommendations.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  <div className="text-[11px] font-semibold text-amber-300 uppercase tracking-wider mb-2">
+                    ✨ {m.recommendations.length} Matching Categories
+                  </div>
+                  {m.recommendations.slice(0, 5).map((rec: any, idx: number) => (
+                    <div
+                      key={rec.category_id || idx}
+                      className="rounded-xl border border-amber-400/30 bg-zinc-900/50 p-3 hover:border-amber-400/60 hover:bg-zinc-900/70 transition-all cursor-pointer"
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-1.5">
+                        <h4 className="text-[11px] font-semibold text-amber-300 leading-tight">
+                          {rec.category_name}
+                        </h4>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 shrink-0">
+                          {Math.round(rec.similarity_score * 100)}%
+                        </span>
+                      </div>
+                      <p className="text-[9px] text-zinc-500 mb-2 uppercase tracking-wide">
+                        {rec.program_name}
+                      </p>
+                      <p className="text-[10px] text-zinc-300 leading-relaxed mb-2">
+                        {rec.description.length > 150 
+                          ? rec.description.substring(0, 150) + '...' 
+                          : rec.description}
+                      </p>
+                      {rec.match_reasons && rec.match_reasons.length > 0 && (
+                        <div className="text-[10px] text-amber-200/80 flex items-start gap-1.5 bg-amber-400/5 rounded-lg p-2 mb-2">
+                          <span className="shrink-0">💡</span>
+                          <span className="leading-relaxed">{rec.match_reasons[0]}</span>
+                        </div>
+                      )}
+                      <button className="text-[9px] text-amber-400 hover:text-amber-300 font-medium uppercase tracking-wider">
+                        View Details →
+                      </button>
+                    </div>
+                  ))}
+                  {m.recommendations.length > 5 && (
+                    <div className="text-[10px] text-zinc-500 text-center py-2 bg-zinc-900/30 rounded-lg">
+                      + {m.recommendations.length - 5} more categories available
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
