@@ -85,9 +85,26 @@ export default function DashboardPage() {
   const scrollRef = useAutoScroll<HTMLDivElement>(messages);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toasts, showToast, removeToast } = useToast();
+  const lastScrollTime = useRef<number>(0);
 
   // Debounce input for better performance (optional, for future features)
   const debouncedInput = useDebounce(input, 300);
+
+  // Optimized scroll function with debouncing
+  const scrollToBottom = useCallback(() => {
+    const now = Date.now();
+    if (now - lastScrollTime.current < 50) return; // Debounce 50ms
+    
+    lastScrollTime.current = now;
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [scrollRef]);
+
+  // Scroll when messages change (debounced)
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
 
   // Keyboard shortcut: Cmd/Ctrl + K to focus input
   useKeyboardShortcut("k", () => inputRef.current?.focus(), { meta: true });
@@ -187,29 +204,52 @@ export default function DashboardPage() {
       let typingQueue: string[] = []; // Queue of text chunks to type
       let isTyping = false; // Flag to prevent concurrent typing
 
-      // Typing animation function
+      // Optimized typing animation function with batching and adaptive speed
       const typeText = async (text: string) => {
         if (!text) return;
         
-        // Type character by character with a small delay
-        for (let i = 0; i < text.length; i++) {
-          const char = text[i];
-          
-          // Use flushSync for immediate render
+        // Skip animation for very short chunks (optimization)
+        if (text.length < TYPING_CONFIG.MIN_CHUNK_LENGTH_FOR_ANIMATION) {
           flushSync(() => {
             setMessages((prev) =>
-              prev.map((m) => (m.id === replyId ? { ...m, content: m.content + char } : m)),
+              prev.map((m) => (m.id === replyId ? { ...m, content: m.content + text } : m)),
             );
           });
+          return;
+        }
+        
+        // Adaptive speed: Type faster for longer chunks
+        let charDelay = TYPING_CONFIG.CHAR_DELAY;
+        if (TYPING_CONFIG.ADAPTIVE_SPEED && text.length > 50) {
+          charDelay = Math.max(5, charDelay * 0.7); // 30% faster for long chunks
+        }
+        
+        // Batch processing: Type multiple characters at once
+        const batchSize = TYPING_CONFIG.BATCH_SIZE;
+        
+        for (let i = 0; i < text.length; i += batchSize) {
+          const batch = text.slice(i, i + batchSize);
           
-          // Configurable delay between characters
-          if (TYPING_CONFIG.CHAR_DELAY > 0) {
-            await new Promise(resolve => setTimeout(resolve, TYPING_CONFIG.CHAR_DELAY));
+          // Use requestAnimationFrame for smoother rendering
+          await new Promise<void>(resolve => {
+            requestAnimationFrame(() => {
+              flushSync(() => {
+                setMessages((prev) =>
+                  prev.map((m) => (m.id === replyId ? { ...m, content: m.content + batch } : m)),
+                );
+              });
+              resolve();
+            });
+          });
+          
+          // Configurable delay between batches
+          if (charDelay > 0 && i + batchSize < text.length) {
+            await new Promise(resolve => setTimeout(resolve, charDelay));
           }
         }
       };
 
-      // Process typing queue
+      // Process typing queue with optimization
       const processTypingQueue = async () => {
         if (isTyping) return;
         
