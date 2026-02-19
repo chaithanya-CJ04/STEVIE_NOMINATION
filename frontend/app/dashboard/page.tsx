@@ -86,6 +86,9 @@ export default function DashboardPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { toasts, showToast, removeToast } = useToast();
   const lastScrollTime = useRef<number>(0);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Debounce input for better performance (optional, for future features)
   const debouncedInput = useDebounce(input, 300);
@@ -108,6 +111,55 @@ export default function DashboardPage() {
 
   // Keyboard shortcut: Cmd/Ctrl + K to focus input
   useKeyboardShortcut("k", () => inputRef.current?.focus(), { meta: true });
+
+  // Handle file upload
+  const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const validFiles = Array.from(files).filter(file => {
+      const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      
+      if (!validTypes.includes(file.type)) {
+        showToast({ message: `${file.name}: Invalid file type. Only PDF and DOC files are allowed.`, type: "error" });
+        return false;
+      }
+      
+      if (file.size > maxSize) {
+        showToast({ message: `${file.name}: File too large. Maximum size is 10MB.`, type: "error" });
+        return false;
+      }
+      
+      return true;
+    });
+
+    if (validFiles.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      // Add files to uploaded list
+      setUploadedFiles(prev => [...prev, ...validFiles]);
+      showToast({ message: `${validFiles.length} file(s) uploaded successfully`, type: "success" });
+      
+      // TODO: Send files to backend API
+      // const formData = new FormData();
+      // validFiles.forEach(file => formData.append('files', file));
+      // await fetch('/api/upload', { method: 'POST', body: formData });
+    } catch (err: any) {
+      showToast({ message: err?.message || "Failed to upload files", type: "error" });
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  }, [showToast]);
+
+  const handleRemoveFile = useCallback((index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+    showToast({ message: "File removed", type: "success" });
+  }, [showToast]);
 
   useEffect(() => {
     // Generate a proper UUID v4 for this chat session
@@ -425,6 +477,106 @@ export default function DashboardPage() {
               We&apos;re designing a rich overview of your nomination progress, conversations,
               and key insights. This dashboard will appear here once it&apos;s ready.
             </p>
+            
+            {/* Upload Documents Button */}
+            <div className="mt-6 w-full max-w-md">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.doc,.docx"
+                multiple
+                onChange={handleFileUpload}
+                className="hidden"
+                id="file-upload"
+                aria-label="Upload documents"
+              />
+              <label htmlFor="file-upload">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="w-full flex items-center justify-center gap-3 rounded-2xl border border-zinc-700/70 bg-zinc-900/80 px-6 py-4 text-sm font-medium text-zinc-300 transition-all hover:border-amber-400/50 hover:bg-zinc-900 hover:text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Upload documents"
+                >
+                  <svg 
+                    className="w-5 h-5" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={2} 
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" 
+                    />
+                  </svg>
+                  <span>{isUploading ? "Uploading..." : "Upload Documents"}</span>
+                </button>
+              </label>
+              
+              {/* Uploaded Files List */}
+              {uploadedFiles.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                    Uploaded Files ({uploadedFiles.length})
+                  </p>
+                  <div className="max-h-40 overflow-y-auto space-y-2">
+                    {uploadedFiles.map((file, index) => (
+                      <div
+                        key={`${file.name}-${index}`}
+                        className="flex items-center justify-between gap-3 rounded-lg border border-zinc-800/70 bg-zinc-950/50 px-4 py-2.5 text-xs"
+                      >
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <svg 
+                            className="w-4 h-4 text-amber-400 shrink-0" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
+                            />
+                          </svg>
+                          <span className="text-zinc-300 truncate" title={file.name}>
+                            {file.name}
+                          </span>
+                          <span className="text-zinc-500 shrink-0">
+                            ({(file.size / 1024).toFixed(1)} KB)
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveFile(index)}
+                          className="text-zinc-500 hover:text-red-400 transition-colors focus:outline-none focus:text-red-400"
+                          aria-label={`Remove ${file.name}`}
+                        >
+                          <svg 
+                            className="w-4 h-4" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M6 18L18 6M6 6l12 12" 
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </section>
 
