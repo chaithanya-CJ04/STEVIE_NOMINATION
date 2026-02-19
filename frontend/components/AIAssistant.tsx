@@ -335,6 +335,9 @@ export function AIAssistant() {
       while (typingQueue.length > 0 || isTyping) {
         await new Promise(resolve => setTimeout(resolve, 50));
       }
+      
+      // Auto-focus input after response completes
+      inputRef.current?.focus();
     } catch (err: any) {
       if (err?.name === "AbortError") return;
       
