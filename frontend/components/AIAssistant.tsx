@@ -404,12 +404,12 @@ export function AIAssistant() {
             aria-label="Chat messages"
           >
             {messages.map((m) => (
-              <div key={m.id}>
+              <div key={m.id} className={m.role === "user" ? "flex justify-end" : ""}>
                 <div
                   className={
                     m.role === "assistant"
                       ? "max-w-[85%] rounded-2xl bg-zinc-900 px-3 py-2 text-zinc-100"
-                      : "ml-auto max-w-[85%] rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 text-black"
+                      : "max-w-[85%] w-fit rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 text-black"
                   }
                   role={m.role === "assistant" ? "article" : "status"}
                 >
