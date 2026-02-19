@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { useKeyboardShortcut } from "@/lib/hooks";
+import { AIAssistant } from "@/components/AIAssistant";
 
 interface SiteShellProps {
   children: ReactNode;
@@ -51,9 +52,9 @@ export function SiteShell({ children }: SiteShellProps) {
         </header>
       )}
 
-      <div className="mx-auto flex max-w-6xl px-6 pb-12 pt-8 h-[calc(100vh-96px)] min-h-[calc(100vh-96px)] items-stretch">
+      <div className="mx-auto flex max-w-6xl px-6 pb-12 pt-8 h-[calc(100vh-96px)] min-h-[calc(100vh-96px)] items-stretch gap-4">
         {showChrome && (isDashboardRoute || isDocumentsRoute) && (
-          <aside className="mr-4 hidden h-full w-52 min-h-[420px] flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
+          <aside className="hidden h-full w-52 min-h-[420px] flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
             <nav className="space-y-4" aria-label="Main navigation">
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">
                 Navigation
@@ -106,8 +107,14 @@ export function SiteShell({ children }: SiteShellProps) {
           </aside>
         )}
 
-        <main className="flex-1 h-full" role="main">
-          {children}
+        <main className="flex-1 h-full flex gap-4" role="main">
+          <div className="flex-1">
+            {children}
+          </div>
+          
+          {showChrome && (isDashboardRoute || isDocumentsRoute) && (
+            <AIAssistant />
+          )}
         </main>
       </div>
     </div>
