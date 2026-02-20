@@ -410,19 +410,21 @@ export function AIAssistant() {
           >
             {messages.map((m) => (
               <div key={m.id} className={m.role === "user" ? "flex justify-end" : ""}>
-                <div
-                  className={
-                    m.role === "assistant"
-                      ? "max-w-[85%] w-fit rounded-2xl bg-zinc-900 px-3 py-2 text-zinc-100"
-                      : "max-w-[85%] w-fit rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 text-black"
-                  }
-                  role={m.role === "assistant" ? "article" : "status"}
-                >
-                  {m.content || <span className="opacity-50">Thinking...</span>}
-                  {m.role === "assistant" && loadingReply && m.id === messages[messages.length - 1]?.id && m.content && (
-                    <span className="inline-block ml-0.5 w-1.5 h-3 bg-amber-400 animate-pulse" />
-                  )}
-                </div>
+                {m.content ? (
+                  <div
+                    className={
+                      m.role === "assistant"
+                        ? "max-w-[85%] w-fit rounded-2xl bg-zinc-900 px-3 py-2 text-zinc-100"
+                        : "max-w-[85%] w-fit rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 text-black"
+                    }
+                    role={m.role === "assistant" ? "article" : "status"}
+                  >
+                    {m.content}
+                    {m.role === "assistant" && loadingReply && m.id === messages[messages.length - 1]?.id && (
+                      <span className="inline-block ml-0.5 w-1.5 h-3 bg-amber-400 animate-pulse" />
+                    )}
+                  </div>
+                ) : null}
                 
                 {m.recommendations && m.recommendations.length > 0 && (
                   <div className="mt-3 space-y-2" role="region" aria-label="Recommendations">
@@ -449,7 +451,7 @@ export function AIAssistant() {
                   <span className="animate-bounce" style={{ animationDelay: "150ms" }}>●</span>
                   <span className="animate-bounce" style={{ animationDelay: "300ms" }}>●</span>
                 </div>
-                <span className="text-[11px]">AI is typing...</span>
+                <span className="text-[11px]">Thinking...</span>
               </div>
             )}
           </div>
