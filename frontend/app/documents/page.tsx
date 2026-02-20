@@ -144,8 +144,8 @@ export default function DocumentsPage() {
         ))}
 
         {/* Documents section */}
-        <section className="flex h-full flex-1 min-h-[420px] rounded-[32px] border border-zinc-800/70 bg-black/80 px-10 py-12 text-zinc-100 shadow-[0_0_60px_rgba(0,0,0,0.9)]">
-          <div className="w-full flex flex-col gap-8">
+        <section className="flex h-full flex-1 min-h-[420px] rounded-[32px] border border-zinc-800/70 bg-black/80 px-6 py-8 text-zinc-100 shadow-[0_0_60px_rgba(0,0,0,0.9)] overflow-hidden">
+          <div className="w-full flex flex-col gap-8 overflow-auto">
             {/* Upload Section - Centered */}
             <div className="flex items-center justify-center">
               <div className="w-full max-w-3xl">
@@ -408,29 +408,9 @@ export default function DocumentsPage() {
                   
                   <div className="max-w-sm">
                     <p className="text-lg font-semibold text-zinc-300 mb-2">No documents uploaded yet</p>
-                    <p className="text-sm text-zinc-500 mb-4">
+                    <p className="text-sm text-zinc-500">
                       Upload your first document to get started. You can add supporting materials, company information, or achievement evidence.
                     </p>
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 border border-amber-400/30 px-5 py-2.5 text-sm font-medium text-amber-300 transition-all hover:bg-amber-500/20 hover:border-amber-400/50 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
-                    >
-                      <svg 
-                        className="w-4 h-4" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth={2} 
-                          d="M12 4v16m8-8H4" 
-                        />
-                      </svg>
-                      Upload Your First Document
-                    </button>
                   </div>
                 </div>
               )}
