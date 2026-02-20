@@ -335,9 +335,6 @@ export function AIAssistant() {
       while (typingQueue.length > 0 || isTyping) {
         await new Promise(resolve => setTimeout(resolve, 50));
       }
-      
-      // Auto-focus input after response completes
-      inputRef.current?.focus();
     } catch (err: any) {
       if (err?.name === "AbortError") return;
       
@@ -362,6 +359,11 @@ export function AIAssistant() {
       if (streamAbortRef.current === controller) {
         streamAbortRef.current = null;
       }
+      
+      // Auto-focus input after response completes
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
     }
   }, [input, loadingReply, sessionId, showToast]);
 
