@@ -73,7 +73,7 @@ export function SiteShell({ children }: SiteShellProps) {
         </header>
       )}
 
-      <div className="mx-auto flex max-w-6xl px-6 pb-12 pt-8 h-[calc(100vh-96px)] min-h-[calc(100vh-96px)] items-stretch gap-4">
+      <div className="mx-auto flex max-w-6xl px-4 sm:px-6 pb-6 sm:pb-12 pt-4 sm:pt-8 h-[calc(100vh-80px)] sm:h-[calc(100vh-96px)] min-h-[calc(100vh-80px)] sm:min-h-[calc(100vh-96px)] items-stretch gap-2 sm:gap-4">
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (isDashboardRoute || isDocumentsRoute) && (
           <div 
@@ -144,7 +144,7 @@ export function SiteShell({ children }: SiteShellProps) {
         )}
         
         {showChrome && (isDashboardRoute || isDocumentsRoute) && (
-          <aside className="hidden h-full w-52 min-h-[420px] flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
+          <aside className="hidden lg:flex h-full w-52 min-h-[420px] flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)]">
             <nav className="space-y-4" aria-label="Main navigation">
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">
                 Navigation
@@ -197,13 +197,15 @@ export function SiteShell({ children }: SiteShellProps) {
           </aside>
         )}
 
-        <main className="flex-1 h-full flex gap-4" role="main">
-          <div className="flex-1">
+        <main className="flex-1 h-full flex flex-col lg:flex-row gap-2 sm:gap-4 min-w-0 overflow-hidden" role="main">
+          <div className="flex-1 min-w-0 h-full overflow-auto">
             {children}
           </div>
           
           {showChrome && (isDashboardRoute || isDocumentsRoute) && (
-            <AIAssistant />
+            <div className="hidden lg:block shrink-0">
+              <AIAssistant />
+            </div>
           )}
         </main>
       </div>
