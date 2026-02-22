@@ -377,7 +377,7 @@ export function AIAssistant() {
         />
       ))}
       
-      <aside className="flex h-full w-full max-w-md min-h-[420px] rounded-3xl border border-amber-400/50 bg-zinc-950/90 p-5 text-zinc-100 shadow-[0_0_55px_rgba(251,191,36,0.55)] md:w-80">
+      <aside className="flex h-full w-full rounded-3xl border border-amber-400/50 bg-zinc-950/90 p-5 text-zinc-100 shadow-[0_0_55px_rgba(251,191,36,0.55)]">
         <div className="flex h-full w-full flex-col">
           <header className="mb-4 flex items-center justify-between gap-3">
             <div>
@@ -398,6 +398,59 @@ export function AIAssistant() {
           {metadata?.intent && (
             <div className="mb-3 text-[11px] text-zinc-400" role="status">
               Intent: <span className="text-zinc-200 capitalize">{metadata.intent}</span>
+            </div>
+          )}
+
+          {/* Quick Questions - Show only when there are no user messages */}
+          {messages.length === 1 && messages[0].role === "assistant" && (
+            <div className="mb-4">
+              <p className="text-sm text-zinc-400 text-center mb-4">
+                Ask me anything about your project requirements or the Request for Proposal process.
+              </p>
+              <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setInput("Risks")}
+                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
+                  >
+                    Risks
+                  </button>
+                  <button
+                    onClick={() => setInput("Summarize progress")}
+                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
+                  >
+                    Summarize progress
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setInput("Blockers")}
+                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
+                  >
+                    Blockers
+                  </button>
+                  <button
+                    onClick={() => setInput("Doc highlights")}
+                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
+                  >
+                    Doc highlights
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setInput("Project status")}
+                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
+                  >
+                    Project status
+                  </button>
+                  <button
+                    onClick={() => setInput("Next steps")}
+                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
+                  >
+                    Next steps
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 

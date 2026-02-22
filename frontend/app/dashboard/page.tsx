@@ -105,8 +105,8 @@ export default function DashboardPage() {
         </aside>
 
         {/* Right Section - AI Assistant (Full Width) */}
-        <main className="flex-1 bg-black p-8 overflow-hidden flex items-center justify-center">
-          <div className="w-full h-full max-w-4xl">
+        <main className="flex-1 bg-black p-8 overflow-hidden">
+          <div className="w-full h-full">
             <AIAssistant />
           </div>
         </main>
