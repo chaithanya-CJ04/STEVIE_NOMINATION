@@ -403,11 +403,11 @@ export function AIAssistant() {
 
           {/* Quick Questions - Show only when there are no user messages */}
           {messages.length === 1 && messages[0].role === "assistant" && (
-            <div className="mb-4">
-              <p className="text-sm text-zinc-400 text-center mb-4">
-                Ask me anything about your project requirements or the Request for Proposal process.
+            <div className="flex-1 flex flex-col items-center justify-center mb-4">
+              <p className="text-base text-zinc-300 text-center mb-6 max-w-md">
+                Hi! I'm your Stevie Awards assistant. I can answer questions or help you find the right category. What would you like to know?
               </p>
-              <div className="space-y-2">
+              <div className="space-y-2 w-full max-w-lg">
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setInput("Risks")}
