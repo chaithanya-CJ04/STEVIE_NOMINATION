@@ -9,175 +9,99 @@ export default function DashboardPage() {
 
   return (
     <ErrorBoundary>
-      <div className="flex h-screen w-full overflow-hidden">
+      <div className="flex h-screen w-full overflow-hidden bg-black">
         {/* Left Sidebar - Navigation */}
-        <aside className="w-64 flex-shrink-0 bg-[#0a0a0a] p-6 flex flex-col">
+        <aside className="w-80 flex-shrink-0 bg-[#0a0a0a] p-8 flex flex-col">
           <div className="mb-8">
-            <h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600 mb-4">Navigation</h2>
-            <nav className="space-y-1">
+            <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-600 mb-6">Navigation</h2>
+            <nav className="space-y-2">
               <button
                 onClick={() => router.push("/dashboard")}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-black bg-gradient-to-r from-amber-400 to-amber-500 rounded-lg"
+                className="w-full flex items-center gap-4 px-5 py-4 text-base font-semibold text-black bg-gradient-to-r from-amber-400 to-amber-500 rounded-xl shadow-lg transition-all"
                 aria-current="page"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586 6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z"/>
                 </svg>
                 Dashboard
               </button>
               
               <button
                 onClick={() => router.push("/documents")}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-lg transition-all"
+                className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.937 8.68c-.011-.032-.02-.063-.033-.094a.997.997 0 0 0-.196-.293l-6-6a.997.997 0 0 0-.293-.196c-.03-.014-.062-.022-.094-.033a.991.991 0 0 0-.259-.051C13.04 2.011 13.021 2 13 2H6c-1.103 0-2 .897-2 2v16c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V9c0-.021-.011-.04-.013-.062a.99.99 0 0 0-.05-.258zM16.586 8H14V5.414L16.586 8zM6 20V4h6v5a1 1 0 0 0 1 1h5l.002 10H6z"/>
                 </svg>
                 Documents
               </button>
               
               <button
                 onClick={() => router.push("/chat")}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-lg transition-all"
+                className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M3 3v17a1 1 0 0 0 1 1h17v-2H5V3H3z"/>
+                  <path d="M15.293 14.707a.999.999 0 0 0 1.414 0l5-5-1.414-1.414L16 12.586l-2.293-2.293a.999.999 0 0 0-1.414 0l-5 5 1.414 1.414L13 12.414l2.293 2.293z"/>
                 </svg>
                 Gap Analysis
               </button>
               
               <button
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-lg transition-all"
+                className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM5 19V5h14l.002 14H5z"/>
+                  <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/>
                 </svg>
                 Master Requirements
               </button>
               
               <button
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-lg transition-all"
+                className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="m21.707 11.293-9-9a.999.999 0 0 0-1.414 0l-9 9a.999.999 0 0 0 0 1.414l9 9a.999.999 0 0 0 1.414 0l9-9a.999.999 0 0 0 0-1.414zM13 19.586l-7-7 7-7 7 7-7 7z"/>
+                  <path d="M12 8v6h2V8z"/>
+                  <circle cx="13" cy="16" r="1"/>
                 </svg>
                 Forecast
               </button>
               
               <button
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-lg transition-all"
+                className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8.267 14.68c-.184 0-.308.018-.372.036v1.178c.076.018.171.023.302.023.479 0 .774-.242.774-.651 0-.366-.254-.586-.704-.586zm3.487.012c-.2 0-.33.018-.407.036v2.61c.077.018.201.018.313.018.817.006 1.349-.444 1.349-1.396.006-.83-.479-1.268-1.255-1.268z"/>
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM9.498 16.19c-.309.29-.765.42-1.296.42a2.23 2.23 0 0 1-.308-.018v1.426H7v-3.936A7.558 7.558 0 0 1 8.219 14c.557 0 .953.106 1.22.319.254.202.426.533.426.923-.001.392-.131.723-.367.948zm3.807 1.355c-.42.349-1.059.515-1.84.515-.468 0-.799-.03-1.024-.06v-3.917A7.947 7.947 0 0 1 11.66 14c.757 0 1.249.136 1.633.426.415.308.675.799.675 1.504 0 .763-.279 1.29-.663 1.615zM17 14.77h-1.532v.911H16.9v.734h-1.432v1.604h-.906V14.03H17v.74zM14 9h-1V4l5 5h-4z"/>
                 </svg>
                 Request for Proposal
               </button>
             </nav>
           </div>
           
-          <div className="mt-auto pt-6 border-t border-zinc-800/70">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600">Projects</span>
-              <button className="text-xs text-amber-400 hover:text-amber-300 font-medium">
-                See all
-              </button>
-            </div>
-          </div>
-          
-          <button className="mt-6 w-full px-4 py-2.5 text-sm font-medium text-zinc-400 border border-zinc-800 rounded-lg hover:bg-zinc-900/50 transition-all">
-            Logout
-          </button>
-        </aside>
-
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto bg-[#050505] p-8">
-          <div className="max-w-4xl space-y-6">
-            {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-2xl font-semibold text-zinc-100 mb-1">Project Summary</h1>
-              <p className="text-sm text-zinc-500">Track your nomination progress, conversations, and key insights</p>
-            </div>
-
-            {/* Metric Cards */}
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              {/* Estimated Time Card */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 p-6 shadow-xl">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-blue-400/10 rounded-full -mr-20 -mt-20" />
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center mb-4">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-sm font-semibold text-white mb-1">Estimated time to finish</h3>
-                  <p className="text-xs text-blue-200/60">Not Available</p>
-                </div>
-              </div>
-
-              {/* Estimated Budget Card */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 p-6 shadow-xl">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-slate-500/5 rounded-full -mr-20 -mt-20" />
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center mb-4">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-sm font-semibold text-white mb-1">Estimated Budget</h3>
-                  <p className="text-xs text-slate-300/60">Not Available</p>
-                </div>
-              </div>
-
-              {/* Confidence Card */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 p-6 shadow-xl">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-400/10 rounded-full -mr-20 -mt-20" />
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center mb-4">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-sm font-semibold text-white mb-1">Confidence</h3>
-                  <p className="text-xs text-emerald-200/60">Not Available</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Uploaded Documents Section */}
-            <button
-              onClick={() => router.push("/documents")}
-              className="w-full flex items-center justify-center gap-3 rounded-2xl bg-blue-600 px-6 py-5 text-sm font-semibold text-white transition-all hover:bg-blue-500 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
-              <span>Uploaded documents</span>
-            </button>
-
-            {/* Tasks Section */}
-            <div className="rounded-2xl bg-[#0a0a0a] border border-zinc-900 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-semibold text-zinc-100">Tasks</h2>
-                <button className="text-xs text-amber-400 hover:text-amber-300 font-medium">
-                  Gap analysis
+          <div className="mt-auto">
+            <div className="pt-6 border-t border-zinc-800/70 mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-600">Projects</span>
+                <button className="text-xs text-amber-400 hover:text-amber-300 font-medium transition-colors">
+                  See all
                 </button>
               </div>
-              
-              <p className="text-sm text-zinc-500 mb-6">No tasks created yet</p>
-              
-              <button className="w-full rounded-xl bg-zinc-900 px-6 py-3.5 text-sm font-semibold text-zinc-100 transition-all hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-700">
-                See all questions
-              </button>
             </div>
-          </div>
-        </main>
-
-        {/* Right Sidebar - AI Assistant */}
-        <aside className="w-[400px] flex-shrink-0 bg-[#0a0a0a] border-l border-zinc-900 p-6 overflow-y-auto">
-          <div className="h-full flex items-center justify-center">
-            <AIAssistant />
+            
+            <button className="w-full px-5 py-3 text-sm font-medium text-zinc-400 border border-zinc-800 rounded-xl hover:bg-zinc-900/50 hover:text-zinc-200 transition-all">
+              Logout
+            </button>
           </div>
         </aside>
+
+        {/* Right Section - AI Assistant (Full Width) */}
+        <main className="flex-1 bg-black p-8 overflow-y-auto flex items-center justify-center">
+          <div className="w-full max-w-2xl">
+            <AIAssistant />
+          </div>
+        </main>
       </div>
     </ErrorBoundary>
   );
