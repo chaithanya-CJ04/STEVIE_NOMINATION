@@ -9,9 +9,27 @@ export default function DashboardPage() {
 
   return (
     <ErrorBoundary>
-      <div className="fixed inset-0 flex h-screen w-screen overflow-hidden bg-black">
-        {/* Left Sidebar - Navigation */}
-        <aside className="w-80 flex-shrink-0 bg-[#0a0a0a] p-8 flex flex-col border-r border-zinc-900">
+      <div className="fixed inset-0 flex flex-col h-screen w-screen overflow-hidden bg-black">
+        {/* Top Bar */}
+        <header className="w-full border-b border-zinc-800/60 bg-black/60 backdrop-blur-sm">
+          <div className="px-6 py-4 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <img
+                src="/stevie-awards-banner.png"
+                alt="Stevie Awards Banner"
+                className="h-12 w-auto object-contain"
+              />
+              <span className="hidden sm:block text-base font-medium text-zinc-200 tracking-wide">
+                Stevie Awards Recommendation System
+              </span>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content Area */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Left Sidebar - Navigation */}
+          <aside className="w-80 flex-shrink-0 bg-[#0a0a0a] p-8 flex flex-col border-r border-zinc-900">
           <div className="flex-1">
             <nav className="space-y-2">
               <button
@@ -92,6 +110,7 @@ export default function DashboardPage() {
             <AIAssistant />
           </div>
         </main>
+      </div>
       </div>
     </ErrorBoundary>
   );
