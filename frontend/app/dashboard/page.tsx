@@ -9,9 +9,9 @@ export default function DashboardPage() {
 
   return (
     <ErrorBoundary>
-      <div className="flex h-screen w-full overflow-hidden bg-black">
+      <div className="fixed inset-0 flex h-screen w-screen overflow-hidden bg-black">
         {/* Left Sidebar - Navigation */}
-        <aside className="w-80 flex-shrink-0 bg-[#0a0a0a] p-8 flex flex-col">
+        <aside className="w-80 flex-shrink-0 bg-[#0a0a0a] p-8 flex flex-col border-r border-zinc-900">
           <div className="mb-8">
             <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-600 mb-6">Navigation</h2>
             <nav className="space-y-2">
@@ -97,8 +97,8 @@ export default function DashboardPage() {
         </aside>
 
         {/* Right Section - AI Assistant (Full Width) */}
-        <main className="flex-1 bg-black p-8 overflow-y-auto flex items-center justify-center">
-          <div className="w-full max-w-2xl">
+        <main className="flex-1 bg-black p-8 overflow-hidden flex items-center justify-center">
+          <div className="w-full h-full max-w-4xl">
             <AIAssistant />
           </div>
         </main>
