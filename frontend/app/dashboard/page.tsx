@@ -12,8 +12,7 @@ export default function DashboardPage() {
       <div className="fixed inset-0 flex h-screen w-screen overflow-hidden bg-black">
         {/* Left Sidebar - Navigation */}
         <aside className="w-80 flex-shrink-0 bg-[#0a0a0a] p-8 flex flex-col border-r border-zinc-900">
-          <div className="mb-8">
-            <h2 className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-600 mb-6">Navigation</h2>
+          <div className="flex-1">
             <nav className="space-y-2">
               <button
                 onClick={() => router.push("/dashboard")}
@@ -80,16 +79,7 @@ export default function DashboardPage() {
             </nav>
           </div>
           
-          <div className="mt-auto">
-            <div className="pt-6 border-t border-zinc-800/70 mb-6">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-600">Projects</span>
-                <button className="text-xs text-amber-400 hover:text-amber-300 font-medium transition-colors">
-                  See all
-                </button>
-              </div>
-            </div>
-            
+          <div className="mt-auto pt-6 border-t border-zinc-800/70">
             <button className="w-full px-5 py-3 text-sm font-medium text-zinc-400 border border-zinc-800 rounded-xl hover:bg-zinc-900/50 hover:text-zinc-200 transition-all">
               Logout
             </button>
