@@ -401,59 +401,6 @@ export function AIAssistant() {
             </div>
           )}
 
-          {/* Quick Questions - Show only when there are no user messages */}
-          {messages.length === 1 && messages[0].role === "assistant" && (
-            <div className="flex-1 flex flex-col items-center justify-center mb-4">
-              <p className="text-base text-zinc-300 text-center mb-6 max-w-md">
-                Hi! I'm your Stevie Awards assistant. I can answer questions or help you find the right category. What would you like to know?
-              </p>
-              <div className="space-y-2 w-full max-w-lg">
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => setInput("Risks")}
-                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
-                  >
-                    Risks
-                  </button>
-                  <button
-                    onClick={() => setInput("Summarize progress")}
-                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
-                  >
-                    Summarize progress
-                  </button>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => setInput("Blockers")}
-                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
-                  >
-                    Blockers
-                  </button>
-                  <button
-                    onClick={() => setInput("Doc highlights")}
-                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
-                  >
-                    Doc highlights
-                  </button>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => setInput("Project status")}
-                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
-                  >
-                    Project status
-                  </button>
-                  <button
-                    onClick={() => setInput("Next steps")}
-                    className="px-4 py-2.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 border border-zinc-800 rounded-full hover:bg-zinc-800 hover:border-amber-400/50 transition-all"
-                  >
-                    Next steps
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
           <div 
             ref={scrollRef} 
             className="mb-4 flex-1 space-y-2 overflow-y-auto pr-1 text-[12px] scroll-smooth"
