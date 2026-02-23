@@ -244,9 +244,9 @@ export default function DocumentsPage() {
 
               {/* Documents section */}
               <div className="w-full flex flex-col gap-8">
-            {/* Upload Section - Centered */}
-            <div className="flex items-center justify-center">
-              <div className="w-full max-w-3xl">
+                {/* Upload Section - Centered */}
+                <div className="flex items-center justify-center">
+                  <div className="w-full max-w-3xl">
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -512,6 +512,7 @@ export default function DocumentsPage() {
                   </div>
                 </div>
               )}
+            </div>
               </div>
             </div>
           </main>
