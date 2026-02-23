@@ -16,7 +16,7 @@ export function SiteShell({ children }: SiteShellProps) {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const showChrome = pathname !== "/auth" && pathname !== "/dashboard";
+  const showChrome = pathname !== "/auth" && pathname !== "/dashboard" && pathname !== "/documents";
   const isChatRoute = pathname.startsWith("/chat");
   const isDashboardRoute = pathname.startsWith("/dashboard");
   const isDocumentsRoute = pathname.startsWith("/documents");
@@ -32,8 +32,8 @@ export function SiteShell({ children }: SiteShellProps) {
   // Keyboard shortcut: Shift + L to logout
   useKeyboardShortcut("l", handleLogout, { shift: true });
 
-  // If dashboard route, render children directly without any wrapper
-  if (isDashboardRoute) {
+  // If dashboard or documents route, render children directly without any wrapper
+  if (isDashboardRoute || isDocumentsRoute) {
     return <>{children}</>;
   }
 
