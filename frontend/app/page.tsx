@@ -21,16 +21,24 @@ export default function Home() {
   useEffect(() => {
     let mounted = true;
 
-    supabase.auth
-      .getSession()
-      .then(({ data }) => {
+    const timeout = new Promise<void>((resolve) =>
+      setTimeout(resolve, 4000)
+    );
+
+    Promise.race([
+      supabase.auth.getSession().then(({ data }) => {
         if (!mounted) return;
         setAuthState(data.session ? "authenticated" : "unauthenticated");
-      })
-      .catch(() => {
+      }),
+      timeout.then(() => {
         if (!mounted) return;
-        setAuthState("unauthenticated");
-      });
+        // Supabase took too long — fall back so the user isn't stuck
+        setAuthState((prev) => (prev === "unknown" ? "unauthenticated" : prev));
+      }),
+    ]).catch(() => {
+      if (!mounted) return;
+      setAuthState("unauthenticated");
+    });
 
     return () => {
       mounted = false;

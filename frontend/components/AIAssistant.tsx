@@ -33,7 +33,7 @@ const RecommendationCard = memo(({ rec, idx }: { rec: any; idx: number }) => (
       <h4 className="text-[11px] font-semibold text-amber-300 leading-tight">
         {rec.category_name}
       </h4>
-      <span 
+      <span
         className="text-[9px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 shrink-0"
         aria-label={`Match score: ${Math.round(rec.similarity_score * 100)} percent`}
       >
@@ -44,8 +44,8 @@ const RecommendationCard = memo(({ rec, idx }: { rec: any; idx: number }) => (
       {rec.program_name}
     </p>
     <p className="text-[10px] text-zinc-300 leading-relaxed mb-2">
-      {rec.description.length > 150 
-        ? rec.description.substring(0, 150) + '...' 
+      {rec.description.length > 150
+        ? rec.description.substring(0, 150) + '...'
         : rec.description}
     </p>
     {rec.match_reasons && rec.match_reasons.length > 0 && (
@@ -54,7 +54,7 @@ const RecommendationCard = memo(({ rec, idx }: { rec: any; idx: number }) => (
         <span className="leading-relaxed">{rec.match_reasons[0]}</span>
       </div>
     )}
-    <button 
+    <button
       className="text-[9px] text-amber-400 hover:text-amber-300 font-medium uppercase tracking-wider focus:outline-none focus:underline"
       aria-label={`View details for ${rec.category_name}`}
     >
@@ -67,14 +67,7 @@ RecommendationCard.displayName = "RecommendationCard";
 
 export function AIAssistant() {
   const [sessionId, setSessionId] = useState<string>("");
-  const [messages, setMessages] = useState<QaMessage[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content:
-        "Hi! I'm your Stevie Awards assistant. I can answer questions or help you find the right category. What would you like to know?",
-    },
-  ]);
+  const [messages, setMessages] = useState<QaMessage[]>([]);
   const [input, setInput] = useState("");
   const [loadingReply, setLoadingReply] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,7 +81,7 @@ export function AIAssistant() {
   const scrollToBottom = useCallback(() => {
     const now = Date.now();
     if (now - lastScrollTime.current < 50) return;
-    
+
     lastScrollTime.current = now;
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -102,7 +95,7 @@ export function AIAssistant() {
   useKeyboardShortcut("k", () => inputRef.current?.focus(), { meta: true });
 
   useEffect(() => {
-    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = Math.random() * 16 | 0;
       const v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
@@ -164,9 +157,9 @@ export function AIAssistant() {
           Accept: "text/event-stream",
           Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           session_id: sessionId,
-          message: trimmed 
+          message: trimmed
         }),
         signal: controller.signal,
       });
@@ -188,7 +181,7 @@ export function AIAssistant() {
 
       const typeText = async (text: string) => {
         if (!text) return;
-        
+
         if (text.length < TYPING_CONFIG.MIN_CHUNK_LENGTH_FOR_ANIMATION) {
           flushSync(() => {
             setMessages((prev) =>
@@ -197,17 +190,17 @@ export function AIAssistant() {
           });
           return;
         }
-        
+
         let charDelay = TYPING_CONFIG.CHAR_DELAY;
         if (TYPING_CONFIG.ADAPTIVE_SPEED && text.length > 50) {
           charDelay = Math.max(5, charDelay * 0.7);
         }
-        
+
         const batchSize = TYPING_CONFIG.BATCH_SIZE;
-        
+
         for (let i = 0; i < text.length; i += batchSize) {
           const batch = text.slice(i, i + batchSize);
-          
+
           await new Promise<void>(resolve => {
             requestAnimationFrame(() => {
               flushSync(() => {
@@ -218,7 +211,7 @@ export function AIAssistant() {
               resolve();
             });
           });
-          
+
           if (charDelay > 0 && i + batchSize < text.length) {
             await new Promise(resolve => setTimeout(resolve, charDelay));
           }
@@ -227,7 +220,7 @@ export function AIAssistant() {
 
       const processTypingQueue = async () => {
         if (isTyping) return;
-        
+
         while (typingQueue.length > 0) {
           isTyping = true;
           const chunk = typingQueue.shift();
@@ -235,7 +228,7 @@ export function AIAssistant() {
             await typeText(chunk);
           }
         }
-        
+
         isTyping = false;
       };
 
@@ -300,11 +293,11 @@ export function AIAssistant() {
           } else if (payload?.type === "recommendations") {
             const recs = payload?.data || [];
             const count = payload?.count || recs.length;
-            
+
             if (count > 0) {
               setMessages((prev) =>
-                prev.map((m) => 
-                  m.id === replyId 
+                prev.map((m) =>
+                  m.id === replyId
                     ? { ...m, recommendations: recs }
                     : m
                 ),
@@ -337,15 +330,15 @@ export function AIAssistant() {
       }
     } catch (err: any) {
       if (err?.name === "AbortError") return;
-      
+
       let errorMsg = err?.message ?? "Failed to generate answer";
-      
+
       if (errorMsg.includes("Failed to fetch") || errorMsg.includes("NetworkError")) {
         errorMsg = "Network error: Unable to reach the backend API. Please check your internet connection and verify the backend is running.";
       } else if (errorMsg.includes("Not authenticated")) {
         errorMsg = "Session expired. Please refresh the page and log in again.";
       }
-      
+
       setError(errorMsg);
       setMessages((prev) =>
         prev.map((m) =>
@@ -359,7 +352,7 @@ export function AIAssistant() {
       if (streamAbortRef.current === controller) {
         streamAbortRef.current = null;
       }
-      
+
       // Auto-focus input after response completes
       setTimeout(() => {
         inputRef.current?.focus();
@@ -376,7 +369,7 @@ export function AIAssistant() {
           onClose={() => removeToast(toast.id)}
         />
       ))}
-      
+
       <aside className="flex h-full w-full rounded-3xl border border-amber-400/50 bg-zinc-950/90 p-5 text-zinc-100 shadow-[0_0_55px_rgba(251,191,36,0.55)]">
         <div className="flex h-full w-full flex-col">
           <header className="mb-4 flex items-center justify-between gap-3">
@@ -388,7 +381,7 @@ export function AIAssistant() {
                 Ask questions or get help finding the right category.
               </p>
             </div>
-            <span 
+            <span
               className="h-2 w-2 rounded-full bg-emerald-400"
               aria-label="Online"
               role="status"
@@ -401,60 +394,121 @@ export function AIAssistant() {
             </div>
           )}
 
-          <div 
-            ref={scrollRef} 
-            className="mb-4 flex-1 space-y-2 overflow-y-auto pr-1 text-[12px] scroll-smooth"
-            role="log"
-            aria-live="polite"
-            aria-label="Chat messages"
-          >
-            {messages.map((m) => (
-              <div key={m.id} className={m.role === "user" ? "flex justify-end" : ""}>
-                {m.content ? (
-                  <div
-                    className={
-                      m.role === "assistant"
-                        ? "max-w-[85%] w-fit rounded-2xl bg-zinc-900 px-3 py-2 text-zinc-100"
-                        : "max-w-[85%] w-fit rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 text-black"
-                    }
-                    role={m.role === "assistant" ? "article" : "status"}
+          {messages.length === 0 && !loadingReply ? (
+            /* ── Empty state: centered welcome ── */
+            <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center px-4">
+              {/* Chat bubble icon */}
+              <div className="relative flex items-center justify-center">
+                <div className="absolute h-16 w-16 rounded-full bg-amber-400/10 blur-xl" />
+                <svg viewBox="0 0 64 64" className="relative h-16 w-16" fill="none" aria-hidden="true">
+                  <circle cx="32" cy="32" r="32" fill="url(#g1)" opacity="0.15" />
+                  <rect x="10" y="14" width="34" height="24" rx="8" fill="url(#g2)" />
+                  <path d="M18 38 l4 8 l6-8" fill="url(#g2)" />
+                  <rect x="20" y="22" width="36" height="24" rx="8" fill="url(#g3)" />
+                  <circle cx="31" cy="34" r="2.2" fill="white" />
+                  <circle cx="38" cy="34" r="2.2" fill="white" />
+                  <circle cx="45" cy="34" r="2.2" fill="white" />
+                  <defs>
+                    <linearGradient id="g1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#fbbf24" />
+                      <stop offset="1" stopColor="#f97316" />
+                    </linearGradient>
+                    <linearGradient id="g2" x1="10" y1="14" x2="44" y2="38" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#fde68a" />
+                      <stop offset="1" stopColor="#f59e0b" />
+                    </linearGradient>
+                    <linearGradient id="g3" x1="20" y1="22" x2="56" y2="46" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#f59e0b" />
+                      <stop offset="1" stopColor="#ea580c" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+
+              {/* Welcome text */}
+              <p className="max-w-[240px] text-[13px] leading-relaxed text-zinc-400">
+                Hi! I&apos;m your Stevie Awards assistant. I can answer questions or help you find the right category. What would you like to know?
+              </p>
+
+              {/* Predefined question chips */}
+              <div className="flex flex-wrap justify-center gap-2" role="group" aria-label="Suggested questions">
+                {[
+                  "What are Stevie Awards?",
+                  "How to enter Stevie Awards?",
+                  "Find a right category for me",
+                ].map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => {
+                      setInput(q);
+                      setTimeout(() => inputRef.current?.focus(), 0);
+                    }}
+                    className="rounded-full border border-zinc-700/80 bg-zinc-900/60 px-3.5 py-1.5 text-[11px] font-medium text-zinc-300 transition hover:border-amber-400/60 hover:bg-amber-400/10 hover:text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400/40"
+                    aria-label={`Ask: ${q}`}
                   >
-                    {m.content}
-                    {m.role === "assistant" && loadingReply && m.id === messages[messages.length - 1]?.id && (
-                      <span className="inline-block ml-0.5 w-1.5 h-3 bg-amber-400 animate-pulse" />
-                    )}
-                  </div>
-                ) : null}
-                
-                {m.recommendations && m.recommendations.length > 0 && (
-                  <div className="mt-3 space-y-2" role="region" aria-label="Recommendations">
-                    <div className="text-[11px] font-semibold text-amber-300 uppercase tracking-wider mb-2">
-                      ✨ {m.recommendations.length} Matching Categories
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            /* ── Active chat log ── */
+            <div
+              ref={scrollRef}
+              className="mb-4 flex-1 space-y-2 overflow-y-auto pr-1 text-[12px] scroll-smooth"
+              role="log"
+              aria-live="polite"
+              aria-label="Chat messages"
+            >
+              {messages.map((m) => (
+                <div key={m.id} className={m.role === "user" ? "flex justify-end" : ""}>
+                  {m.content ? (
+                    <div
+                      className={
+                        m.role === "assistant"
+                          ? "max-w-[85%] w-fit rounded-2xl bg-zinc-900 px-3 py-2 text-zinc-100"
+                          : "max-w-[85%] w-fit rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-2 text-black"
+                      }
+                      role={m.role === "assistant" ? "article" : "status"}
+                    >
+                      {m.content}
+                      {m.role === "assistant" && loadingReply && m.id === messages[messages.length - 1]?.id && (
+                        <span className="inline-block ml-0.5 w-1.5 h-3 bg-amber-400 animate-pulse" />
+                      )}
                     </div>
-                    {m.recommendations.slice(0, 5).map((rec: any, idx: number) => (
-                      <RecommendationCard key={rec.category_id || idx} rec={rec} idx={idx} />
-                    ))}
-                    {m.recommendations.length > 5 && (
-                      <div className="text-[10px] text-zinc-500 text-center py-2 bg-zinc-900/30 rounded-lg">
-                        + {m.recommendations.length - 5} more categories available
+                  ) : null}
+
+                  {m.recommendations && m.recommendations.length > 0 && (
+                    <div className="mt-3 space-y-2" role="region" aria-label="Recommendations">
+                      <div className="text-[11px] font-semibold text-amber-300 uppercase tracking-wider mb-2">
+                        ✨ {m.recommendations.length} Matching Categories
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
-            
-            {loadingReply && messages[messages.length - 1]?.content === "" && (
-              <div className="flex items-center gap-2 text-zinc-400">
-                <div className="flex gap-1">
-                  <span className="animate-bounce" style={{ animationDelay: "0ms" }}>●</span>
-                  <span className="animate-bounce" style={{ animationDelay: "150ms" }}>●</span>
-                  <span className="animate-bounce" style={{ animationDelay: "300ms" }}>●</span>
+                      {m.recommendations.slice(0, 5).map((rec: any, idx: number) => (
+                        <RecommendationCard key={rec.category_id || idx} rec={rec} idx={idx} />
+                      ))}
+                      {m.recommendations.length > 5 && (
+                        <div className="text-[10px] text-zinc-500 text-center py-2 bg-zinc-900/30 rounded-lg">
+                          + {m.recommendations.length - 5} more categories available
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <span className="text-[11px]">Thinking...</span>
-              </div>
-            )}
-          </div>
+              ))}
+
+              {loadingReply && messages[messages.length - 1]?.content === "" && (
+                <div className="flex items-center gap-2 text-zinc-400">
+                  <div className="flex gap-1">
+                    <span className="animate-bounce" style={{ animationDelay: "0ms" }}>●</span>
+                    <span className="animate-bounce" style={{ animationDelay: "150ms" }}>●</span>
+                    <span className="animate-bounce" style={{ animationDelay: "300ms" }}>●</span>
+                  </div>
+                  <span className="text-[11px]">Thinking...</span>
+                </div>
+              )}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="mt-auto flex items-center gap-2">
             <label htmlFor="chat-input" className="sr-only">

@@ -16,10 +16,11 @@ export function SiteShell({ children }: SiteShellProps) {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const showChrome = pathname !== "/auth" && pathname !== "/dashboard" && pathname !== "/documents";
+  const showChrome = pathname !== "/auth" && pathname !== "/dashboard" && pathname !== "/documents" && pathname !== "/summary";
   const isChatRoute = pathname.startsWith("/chat");
   const isDashboardRoute = pathname.startsWith("/dashboard");
   const isDocumentsRoute = pathname.startsWith("/documents");
+  const isSummaryRoute = pathname.startsWith("/summary");
 
   const handleLogout = async () => {
     try {
@@ -32,8 +33,8 @@ export function SiteShell({ children }: SiteShellProps) {
   // Keyboard shortcut: Shift + L to logout
   useKeyboardShortcut("l", handleLogout, { shift: true });
 
-  // If dashboard or documents route, render children directly without any wrapper
-  if (isDashboardRoute || isDocumentsRoute) {
+  // If dashboard, documents, or summary route, render children directly without any wrapper
+  if (isDashboardRoute || isDocumentsRoute || isSummaryRoute) {
     return <>{children}</>;
   }
 
@@ -56,7 +57,7 @@ export function SiteShell({ children }: SiteShellProps) {
                 Stevie Awards Recommendation System
               </span>
             </div>
-            
+
             {/* Mobile Menu Button */}
             {(isDashboardRoute || isDocumentsRoute) && (
               <button
@@ -81,11 +82,11 @@ export function SiteShell({ children }: SiteShellProps) {
       <div className="mx-auto flex max-w-6xl px-6 pb-12 pt-8 h-[calc(100vh-96px)] min-h-[calc(100vh-96px)] items-stretch gap-4">
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (isDashboardRoute || isDocumentsRoute) && (
-          <div 
+          <div
             className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm sm:hidden"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <aside 
+            <aside
               className="absolute left-0 top-0 bottom-0 w-64 bg-black/95 border-r border-zinc-800/70 p-4 flex flex-col justify-between"
               onClick={(e) => e.stopPropagation()}
             >
@@ -101,11 +102,10 @@ export function SiteShell({ children }: SiteShellProps) {
                       router.push("/dashboard");
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${
-                      isDashboardRoute
+                    className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${isDashboardRoute
                         ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
                         : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
-                    }`}
+                      }`}
                     aria-current={isDashboardRoute ? "page" : undefined}
                   >
                     <span>Dashboard</span>
@@ -121,11 +121,10 @@ export function SiteShell({ children }: SiteShellProps) {
                       router.push("/documents");
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${
-                      isDocumentsRoute
+                    className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${isDocumentsRoute
                         ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
                         : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
-                    }`}
+                      }`}
                     aria-current={isDocumentsRoute ? "page" : undefined}
                   >
                     <span>Documents</span>
@@ -147,7 +146,7 @@ export function SiteShell({ children }: SiteShellProps) {
             </aside>
           </div>
         )}
-        
+
         {showChrome && (isDashboardRoute || isDocumentsRoute) && (
           <aside className="hidden h-full w-52 min-h-[420px] flex-col justify-between rounded-3xl border border-zinc-800/70 bg-black/80 p-4 text-sm text-zinc-200 shadow-[0_0_40px_rgba(0,0,0,0.85)] sm:flex">
             <nav className="space-y-4" aria-label="Main navigation">
@@ -159,11 +158,10 @@ export function SiteShell({ children }: SiteShellProps) {
                 <button
                   type="button"
                   onClick={() => router.push("/dashboard")}
-                  className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${
-                    isDashboardRoute
+                  className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${isDashboardRoute
                       ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
                       : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
-                  }`}
+                    }`}
                   aria-current={isDashboardRoute ? "page" : undefined}
                 >
                   <span>Dashboard</span>
@@ -176,11 +174,10 @@ export function SiteShell({ children }: SiteShellProps) {
                 <button
                   type="button"
                   onClick={() => router.push("/documents")}
-                  className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${
-                    isDocumentsRoute
+                  className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${isDocumentsRoute
                       ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
                       : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
-                  }`}
+                    }`}
                   aria-current={isDocumentsRoute ? "page" : undefined}
                 >
                   <span>Documents</span>
@@ -206,7 +203,7 @@ export function SiteShell({ children }: SiteShellProps) {
           <div className="flex-1">
             {children}
           </div>
-          
+
           {showChrome && (isDashboardRoute || isDocumentsRoute) && (
             <AIAssistant />
           )}
