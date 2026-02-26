@@ -77,9 +77,9 @@ export default function GapAnalysisPage() {
 
   return (
     <ErrorBoundary>
-      <div className="fixed inset-0 flex flex-col h-screen w-screen overflow-hidden bg-slate-50">
+      <div className="fixed inset-0 flex flex-col h-screen w-screen overflow-hidden bg-black">
         {/* Top Bar */}
-        <header className="w-full border-b border-slate-200 bg-white">
+        <header className="w-full border-b border-zinc-800/60 bg-black/60 backdrop-blur-sm">
           <div className="px-6 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <img
@@ -87,7 +87,7 @@ export default function GapAnalysisPage() {
                 alt="Stevie Awards Banner"
                 className="h-12 w-auto object-contain"
               />
-              <span className="hidden sm:block text-base font-medium text-slate-800 tracking-wide">
+              <span className="hidden sm:block text-base font-medium text-zinc-200 tracking-wide">
                 Stevie Awards Recommendation System
               </span>
             </div>
@@ -97,12 +97,12 @@ export default function GapAnalysisPage() {
         {/* Main Content Area */}
         <div className="flex flex-1 overflow-hidden">
           {/* Left Sidebar - Navigation */}
-          <aside className="w-80 flex-shrink-0 bg-white p-8 flex flex-col border-r border-slate-200">
+          <aside className="w-80 flex-shrink-0 bg-[#0a0a0a] p-8 flex flex-col border-r border-zinc-900">
             <div className="flex-1">
               <nav className="space-y-2">
                 <button
                   onClick={() => router.push("/dashboard")}
-                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-all"
+                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
                 >
                   <FiHome className="h-5 w-5" />
                   Dashboard
@@ -110,7 +110,7 @@ export default function GapAnalysisPage() {
 
                 <button
                   onClick={() => router.push("/documents")}
-                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-all"
+                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
                 >
                   <FiUpload className="h-5 w-5" />
                   Upload Doc
@@ -127,21 +127,21 @@ export default function GapAnalysisPage() {
 
                 <button
                   onClick={() => router.push("/summary")}
-                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-all"
+                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
                 >
                   <FiFileText className="h-5 w-5" />
                   Summary
                 </button>
 
                 <button
-                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-all"
+                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
                 >
                   <FiTrendingUp className="h-5 w-5" />
                   Forecast
                 </button>
 
                 <button
-                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-all"
+                  className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
                 >
                   <FiCheckSquare className="h-5 w-5" />
                   Category Confirmation
@@ -149,30 +149,30 @@ export default function GapAnalysisPage() {
               </nav>
             </div>
 
-            <div className="mt-auto pt-6 border-t border-slate-200">
-              <button className="w-full px-5 py-3 text-sm font-medium text-slate-600 border border-slate-300 rounded-xl hover:bg-slate-50 hover:text-slate-800 transition-all">
+            <div className="mt-auto pt-6 border-t border-zinc-800/70">
+              <button className="w-full px-5 py-3 text-sm font-medium text-zinc-400 border border-zinc-800 rounded-xl hover:bg-zinc-900/50 hover:text-zinc-200 transition-all">
                 Logout
               </button>
             </div>
           </aside>
 
           {/* Main Content */}
-          <main className="flex-1 bg-slate-50 p-8 overflow-y-auto">
+          <main className="flex-1 bg-black p-8 overflow-y-auto">
             <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
               {/* Page Header */}
               <div className="mb-8">
-                <h1 className="text-2xl font-bold text-slate-800">Gap Analysis</h1>
-                <p className="text-slate-600">Identify missing requirements and generate tasks to improve project coverage</p>
+                <h1 className="text-2xl font-bold text-zinc-100">Gap Analysis</h1>
+                <p className="text-zinc-400">Identify missing requirements and generate tasks to improve project coverage</p>
               </div>
 
               {/* Analysis Summary Card */}
-              <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100">
+              <div className="rounded-2xl bg-zinc-900 p-6 shadow-sm border border-zinc-800">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h2 className="text-lg font-semibold text-slate-800">Analysis Summary</h2>
-                    <p className="text-xs text-slate-500 mt-1">Overview of your gap analysis progress</p>
+                    <h2 className="text-lg font-semibold text-zinc-100">Analysis Summary</h2>
+                    <p className="text-xs text-zinc-400 mt-1">Overview of your gap analysis progress</p>
                   </div>
-                  <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-all">
+                  <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-black bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 rounded-lg transition-all">
                     <FiEdit className="h-4 w-4" />
                     Run Analysis
                   </button>
@@ -196,12 +196,12 @@ export default function GapAnalysisPage() {
               </div>
 
               {/* Gap Analysis Threads Card */}
-              <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100">
+              <div className="rounded-2xl bg-zinc-900 p-6 shadow-sm border border-zinc-800">
                 <div className="flex items-start justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-slate-800">Gap Analysis Threads</h2>
+                  <h2 className="text-lg font-semibold text-zinc-100">Gap Analysis Threads</h2>
                   <button 
                     onClick={() => router.push("/gap-analysis")}
-                    className="px-4 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-all"
+                    className="px-4 py-2 text-sm font-medium text-black bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 rounded-lg transition-all"
                   >
                     View All
                   </button>
@@ -214,10 +214,10 @@ export default function GapAnalysisPage() {
                       <div
                         key={thread.id}
                         onClick={() => router.push(`/gap-analysis?threadId=${thread.id}`)}
-                        className="rounded-lg border border-slate-200 p-4 hover:bg-slate-50 cursor-pointer transition-all"
+                        className="rounded-lg border border-zinc-800 p-4 hover:bg-zinc-800/50 cursor-pointer transition-all"
                       >
                         <div className="flex items-start justify-between gap-3">
-                          <h3 className="text-sm font-semibold text-slate-800 flex-1">
+                          <h3 className="text-sm font-semibold text-zinc-100 flex-1">
                             {thread.title}
                           </h3>
                           <span
@@ -241,18 +241,18 @@ export default function GapAnalysisPage() {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <p className="text-sm font-medium text-slate-700">No gap analysis threads yet</p>
+                    <p className="text-sm font-medium text-zinc-400">No gap analysis threads yet</p>
                   </div>
                 )}
               </div>
 
               {/* Recent Documents Card */}
-              <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100">
+              <div className="rounded-2xl bg-zinc-900 p-6 shadow-sm border border-zinc-800">
                 <div className="flex items-start justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-slate-800">Recent Documents</h2>
+                  <h2 className="text-lg font-semibold text-zinc-100">Recent Documents</h2>
                   <button 
                     onClick={() => router.push("/documents")}
-                    className="px-4 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-all"
+                    className="px-4 py-2 text-sm font-medium text-black bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 rounded-lg transition-all"
                   >
                     Upload New Document
                   </button>
@@ -263,16 +263,16 @@ export default function GapAnalysisPage() {
                   {MOCK_DOCUMENTS.map((document) => (
                     <div
                       key={document.id}
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-all"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800/50 transition-all"
                     >
                       <div className="flex-shrink-0">
-                        <FiFile className="h-5 w-5 text-slate-400" />
+                        <FiFile className="h-5 w-5 text-zinc-400" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-slate-800 truncate">
+                        <p className="text-sm font-medium text-zinc-100 truncate">
                           {document.name}
                         </p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-zinc-400">
                           {formatDate(document.uploadDate)}
                         </p>
                       </div>
@@ -280,10 +280,10 @@ export default function GapAnalysisPage() {
                   ))}
                 </div>
                 
-                <div className="mt-4 pt-4 border-t border-slate-200">
+                <div className="mt-4 pt-4 border-t border-zinc-800">
                   <button 
                     onClick={() => router.push("/documents")}
-                    className="text-sm font-medium text-amber-700 hover:text-amber-800 transition-all"
+                    className="text-sm font-medium text-amber-500 hover:text-amber-400 transition-all"
                   >
                     View All Documents →
                   </button>
