@@ -21,6 +21,7 @@ export function SiteShell({ children }: SiteShellProps) {
   const isDashboardRoute = pathname.startsWith("/dashboard");
   const isDocumentsRoute = pathname.startsWith("/documents");
   const isSummaryRoute = pathname.startsWith("/summary");
+  const isGapAnalysisRoute = pathname.startsWith("/gap-analysis");
 
   const handleLogout = async () => {
     try {
@@ -34,7 +35,7 @@ export function SiteShell({ children }: SiteShellProps) {
   useKeyboardShortcut("l", handleLogout, { shift: true });
 
   // If dashboard, documents, or summary route, render children directly without any wrapper
-  if (isDashboardRoute || isDocumentsRoute || isSummaryRoute) {
+  if (isDashboardRoute || isDocumentsRoute || isSummaryRoute || isGapAnalysisRoute) {
     return <>{children}</>;
   }
 
@@ -103,8 +104,8 @@ export function SiteShell({ children }: SiteShellProps) {
                       setIsMobileMenuOpen(false);
                     }}
                     className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${isDashboardRoute
-                        ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
-                        : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
+                      ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
+                      : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
                       }`}
                     aria-current={isDashboardRoute ? "page" : undefined}
                   >
@@ -122,8 +123,8 @@ export function SiteShell({ children }: SiteShellProps) {
                       setIsMobileMenuOpen(false);
                     }}
                     className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${isDocumentsRoute
-                        ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
-                        : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
+                      ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
+                      : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
                       }`}
                     aria-current={isDocumentsRoute ? "page" : undefined}
                   >
@@ -159,8 +160,8 @@ export function SiteShell({ children }: SiteShellProps) {
                   type="button"
                   onClick={() => router.push("/dashboard")}
                   className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${isDashboardRoute
-                      ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
-                      : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
+                    ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
+                    : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
                     }`}
                   aria-current={isDashboardRoute ? "page" : undefined}
                 >
@@ -175,8 +176,8 @@ export function SiteShell({ children }: SiteShellProps) {
                   type="button"
                   onClick={() => router.push("/documents")}
                   className={`flex w-full min-h-[44px] items-center justify-between rounded-full px-3 py-2 text-left text-xs uppercase tracking-[0.16em] transition focus:outline-none focus:ring-2 ${isDocumentsRoute
-                      ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
-                      : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
+                    ? "border border-amber-500/70 bg-amber-500/10 font-semibold text-amber-300 shadow-[0_0_20px_rgba(250,204,21,0.4)] focus:ring-amber-400/50"
+                    : "border border-zinc-700/80 font-medium text-zinc-300 hover:border-amber-400/50 hover:text-amber-300 focus:ring-amber-400/50"
                     }`}
                   aria-current={isDocumentsRoute ? "page" : undefined}
                 >

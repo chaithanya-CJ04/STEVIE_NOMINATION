@@ -54,7 +54,7 @@ export default function DashboardPage() {
                 </button>
 
                 <button
-                  onClick={() => router.push("/chat")}
+                  onClick={() => router.push("/gap-analysis")}
                   className="w-full flex items-center gap-4 px-5 py-4 text-base font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 rounded-xl transition-all"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
