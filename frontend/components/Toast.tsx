@@ -33,7 +33,7 @@ export function Toast({
   const styles = {
     success: "bg-emerald-500/20 border-emerald-500/50 text-emerald-300",
     error: "bg-red-500/20 border-red-500/50 text-red-300",
-    warning: "bg-amber-500/20 border-amber-500/50 text-amber-300",
+    warning: "bg-[#bd9602]/20 border-[#bd9602]/50 text-amber-300",
     info: "bg-blue-500/20 border-blue-500/50 text-blue-300",
   };
 

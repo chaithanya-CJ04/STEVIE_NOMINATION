@@ -24,7 +24,7 @@ type QaMetadata = {
 const RecommendationCard = memo(({ rec, idx }: { rec: any; idx: number }) => (
   <div
     key={rec.category_id || idx}
-    className="rounded-xl border border-amber-400/30 bg-zinc-900/50 p-3 hover:border-amber-400/60 hover:bg-zinc-900/70 transition-all cursor-pointer focus-within:ring-2 focus-within:ring-amber-400/50"
+    className="rounded-xl border border-amber-400/30 bg-zinc-900/50 p-3 hover:border-amber-400/60 hover:bg-zinc-900/70 transition-all cursor-pointer focus-within:ring-2 focus-within:ring-[#d5ab00]/50"
     role="article"
     aria-label={`Recommendation: ${rec.category_name}`}
     tabIndex={0}
@@ -34,7 +34,7 @@ const RecommendationCard = memo(({ rec, idx }: { rec: any; idx: number }) => (
         {rec.category_name}
       </h4>
       <span
-        className="text-[9px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 shrink-0"
+        className="text-[9px] px-1.5 py-0.5 rounded bg-[#d5ab00]/20 text-amber-300 shrink-0"
         aria-label={`Match score: ${Math.round(rec.similarity_score * 100)} percent`}
       >
         {Math.round(rec.similarity_score * 100)}%
@@ -49,13 +49,13 @@ const RecommendationCard = memo(({ rec, idx }: { rec: any; idx: number }) => (
         : rec.description}
     </p>
     {rec.match_reasons && rec.match_reasons.length > 0 && (
-      <div className="text-[10px] text-amber-200/80 flex items-start gap-1.5 bg-amber-400/5 rounded-lg p-2 mb-2">
+      <div className="text-[10px] text-amber-200/80 flex items-start gap-1.5 bg-[#d5ab00]/5 rounded-lg p-2 mb-2">
         <span className="shrink-0" aria-hidden="true">💡</span>
         <span className="leading-relaxed">{rec.match_reasons[0]}</span>
       </div>
     )}
     <button
-      className="text-[9px] text-amber-400 hover:text-amber-300 font-medium uppercase tracking-wider focus:outline-none focus:underline"
+      className="text-[9px] text-[#bd9602] hover:text-amber-300 font-medium uppercase tracking-wider focus:outline-none focus:underline"
       aria-label={`View details for ${rec.category_name}`}
     >
       View Details →
@@ -114,6 +114,20 @@ export function AIAssistant() {
       showToast({ message: error, type: "error" });
     }
   }, [error, showToast]);
+
+  const handleStartOver = useCallback(() => {
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+    setSessionId(uuid);
+    setMessages([]);
+    setError(null);
+    setMetadata(null);
+    streamAbortRef.current?.abort();
+    setInput("");
+  }, []);
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
@@ -381,11 +395,22 @@ export function AIAssistant() {
                 Ask questions or get help finding the right category.
               </p>
             </div>
-            <span
-              className="h-2 w-2 rounded-full bg-emerald-400"
-              aria-label="Online"
-              role="status"
-            />
+            <div className="flex items-center gap-4">
+              {messages.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleStartOver}
+                  className="px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 border border-zinc-700 rounded-full hover:text-amber-300 hover:border-amber-400/50 hover:bg-[#d5ab00]/10 transition-all"
+                >
+                  Start Over
+                </button>
+              )}
+              <span
+                className="h-2 w-2 rounded-full bg-emerald-400"
+                aria-label="Online"
+                role="status"
+              />
+            </div>
           </header>
 
           {metadata?.intent && (
@@ -399,7 +424,7 @@ export function AIAssistant() {
             <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center px-4">
               {/* Chat bubble icon */}
               <div className="relative flex items-center justify-center">
-                <div className="absolute h-16 w-16 rounded-full bg-amber-400/10 blur-xl" />
+                <div className="absolute h-16 w-16 rounded-full bg-[#d5ab00]/10 blur-xl" />
                 <svg viewBox="0 0 64 64" className="relative h-16 w-16" fill="none" aria-hidden="true">
                   <circle cx="32" cy="32" r="32" fill="url(#g1)" opacity="0.15" />
                   <rect x="10" y="14" width="34" height="24" rx="8" fill="url(#g2)" />
@@ -444,7 +469,7 @@ export function AIAssistant() {
                       setInput(q);
                       setTimeout(() => inputRef.current?.focus(), 0);
                     }}
-                    className="rounded-full border border-zinc-700/80 bg-zinc-900/60 px-3.5 py-1.5 text-[11px] font-medium text-zinc-300 transition hover:border-amber-400/60 hover:bg-amber-400/10 hover:text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400/40"
+                    className="rounded-full border border-zinc-700/80 bg-zinc-900/60 px-3.5 py-1.5 text-[11px] font-medium text-zinc-300 transition hover:border-amber-400/60 hover:bg-[#d5ab00]/10 hover:text-amber-300 focus:outline-none focus:ring-2 focus:ring-[#d5ab00]/40"
                     aria-label={`Ask: ${q}`}
                   >
                     {q}
@@ -474,7 +499,7 @@ export function AIAssistant() {
                     >
                       {m.content}
                       {m.role === "assistant" && loadingReply && m.id === messages[messages.length - 1]?.id && (
-                        <span className="inline-block ml-0.5 w-1.5 h-3 bg-amber-400 animate-pulse" />
+                        <span className="inline-block ml-0.5 w-1.5 h-3 bg-[#d5ab00] animate-pulse" />
                       )}
                     </div>
                   ) : null}
@@ -522,14 +547,14 @@ export function AIAssistant() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask a question... (⌘K to focus)"
               disabled={loadingReply}
-              className="flex-1 rounded-full border border-zinc-700/70 bg-zinc-950 px-3.5 py-2 text-[12px] text-zinc-100 placeholder:text-zinc-500 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30 disabled:opacity-50"
+              className="flex-1 rounded-full border border-zinc-700/70 bg-zinc-950 px-3.5 py-2 text-[12px] text-zinc-100 placeholder:text-zinc-500 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-[#d5ab00]/30 disabled:opacity-50"
               aria-label="Chat input"
               autoComplete="off"
             />
             <button
               type="submit"
               disabled={!input.trim() || loadingReply}
-              className="rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+              className="rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#d5ab00]/50"
               aria-label="Send message"
             >
               {loadingReply ? "..." : "Send"}

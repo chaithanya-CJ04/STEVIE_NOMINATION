@@ -1,26 +1,511 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050505;
-  --foreground: #f5f5f5;
-  --accent-gold: #f4c542;
-  --accent-gold-soft: #f9d66b;
+  --background: #0A0A0A;
+  --foreground: #FFFFFF;
+  --gold-primary: #FADD53;
+  --gold-soft: #F4C542;
+  --red-deep: #D10400;
+  --red-dark: #8B0000;
+  --dark-accent: #1A1A1A;
+  --gray-secondary: #A8A8A9;
 }
 
-/* Tailwind CSS v4 theme variables (inline) */
-@layer theme {
-  :root {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
+@theme {
+  --font-inter: "Inter", system-ui, -apple-system, sans-serif;
+  --font-playfair: "Playfair Display", Georgia, serif;
+
+  --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-slide-in-right: slide-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-in-left: slide-in-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-scale-up: scale-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-slow: pulse-slow 4s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-shimmer-fast: shimmer 1.5s linear infinite;
+  --animate-border-rotate: border-rotate 4s linear infinite;
+  --animate-glow: glow 3s ease-in-out infinite;
+  --animate-glow-gold: glow-gold 3s ease-in-out infinite;
+  --animate-typing: typing 1.4s steps(3) infinite;
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-in-left {
+    0% {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px) scale(1);
+    }
+
+    50% {
+      transform: translateY(-15px) scale(1.02);
+    }
+
+    100% {
+      transform: translateY(0px) scale(1);
+    }
+  }
+
+  @keyframes scale-up {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pulse-slow {
+
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% center;
+    }
+
+    100% {
+      background-position: -200% center;
+    }
+  }
+
+  @keyframes border-rotate {
+    100% {
+      transform: rotate(1turn);
+    }
+  }
+
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 15px rgba(213, 171, 0, 0.2);
+    }
+
+    50% {
+      box-shadow: 0 0 35px rgba(213, 171, 0, 0.6);
+    }
+
+    100% {
+      box-shadow: 0 0 15px rgba(213, 171, 0, 0.2);
+    }
+  }
+
+  @keyframes glow-gold {
+    0% {
+      box-shadow: 0 0 20px rgba(250, 221, 83, 0.15), 0 0 40px rgba(250, 221, 83, 0.05);
+    }
+
+    50% {
+      box-shadow: 0 0 30px rgba(250, 221, 83, 0.35), 0 0 60px rgba(250, 221, 83, 0.15);
+    }
+
+    100% {
+      box-shadow: 0 0 20px rgba(250, 221, 83, 0.15), 0 0 40px rgba(250, 221, 83, 0.05);
+    }
+  }
+
+  @keyframes typing {
+    0% {
+      content: ".";
+    }
+
+    33% {
+      content: "..";
+    }
+
+    66% {
+      content: "...";
+    }
   }
 }
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at top, #1b1b1b 0, #050505 55%, #000000 100%);
+  background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
-    "SF Pro Text", sans-serif;
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+}
+
+/* ── Premium Heading Font ─────────────────────── */
+.font-heading {
+  font-family: var(--font-playfair);
+}
+
+/* ── Shimmering metallic gold text ────────────── */
+.metallic-text {
+  background: linear-gradient(to right,
+      #FADD53 10%,
+      #fff7b0 30%,
+      #FADD53 50%,
+      #fff7b0 70%,
+      #FADD53 90%);
+  background-size: 200% auto;
+  color: #000;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ── Gold glow animation ─────────────────────── */
+.gold-glow {
+  animation: glow-gold 3s ease-in-out infinite;
+}
+
+/* ── Premium glass card ──────────────────────── */
+.glass-card {
+  background: linear-gradient(135deg,
+      rgba(26, 26, 26, 0.8) 0%,
+      rgba(10, 10, 10, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(250, 221, 83, 0.08);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(250, 221, 83, 0.2);
+  box-shadow:
+    0 0 30px rgba(250, 221, 83, 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ── Chat bubble slide-in ────────────────────── */
+.chat-bubble-left {
+  animation: slide-bubble-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.chat-bubble-right {
+  animation: slide-bubble-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes slide-bubble-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slide-bubble-right {
+  0% {
+    opacity: 0;
+    transform: translateX(20px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* ── Typing indicator dots ───────────────────── */
+.typing-dot {
+  animation: typing-bounce 1.4s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typing-bounce {
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* ── Radial glow backgrounds ─────────────────── */
+.hero-glow {
+  position: relative;
+}
+
+.hero-glow::before {
+  content: "";
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center,
+      rgba(250, 221, 83, 0.06) 0%,
+      rgba(209, 4, 0, 0.03) 40%,
+      transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Vignette overlay ────────────────────────── */
+.vignette::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+      transparent 50%,
+      rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Gold CTA button ─────────────────────────── */
+.btn-gold {
+  background: linear-gradient(135deg, #FADD53 0%, #F4C542 50%, #e6b832 100%);
+  color: #0A0A0A;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gold::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #FFE066 0%, #FADD53 50%, #F4C542 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-gold:hover::before {
+  opacity: 1;
+}
+
+.btn-gold:hover {
+  transform: scale(1.03);
+  box-shadow:
+    0 0 25px rgba(250, 221, 83, 0.4),
+    0 0 50px rgba(250, 221, 83, 0.15);
+}
+
+.btn-gold span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Animated gold border ────────────────────── */
+.gold-border-glow {
+  border: 1px solid rgba(250, 221, 83, 0.15);
+  box-shadow:
+    0 0 15px rgba(250, 221, 83, 0.05),
+    inset 0 0 15px rgba(250, 221, 83, 0.02);
+}
+
+.gold-border-glow:hover {
+  border-color: rgba(250, 221, 83, 0.3);
+  box-shadow:
+    0 0 30px rgba(250, 221, 83, 0.1),
+    inset 0 0 20px rgba(250, 221, 83, 0.03);
+}
+
+/* ── Subtle noise texture ────────────────────── */
+.noise-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Premium scrollbar ───────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(250, 221, 83, 0.15);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(250, 221, 83, 0.3);
+}
+
+/* ── Section label (uppercase tracker) ───────────────── */
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(168, 168, 169, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, rgba(250, 221, 83, 0.12), transparent);
+}
+
+/* ── Dark stat card ──────────────────────────────────── */
+.stat-card-dark {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(10, 10, 10, 0.95) 100%);
+  border: 1px solid rgba(250, 221, 83, 0.07);
+  border-radius: 16px;
+  padding: 20px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.stat-card-dark:hover {
+  border-color: rgba(250, 221, 83, 0.18);
+  box-shadow: 0 0 30px rgba(250, 221, 83, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ── Sidebar brand strip ─────────────────────────────── */
+.sidebar-brand-strip {
+  background: linear-gradient(135deg, rgba(250, 221, 83, 0.06) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(250, 221, 83, 0.08);
+}
+
+/* ── Content divider ─────────────────────────────────── */
+.content-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(250, 221, 83, 0.1), transparent);
+  margin: 8px 0;
+}
+
+/* ── Page heading styles ─────────────────────────────── */
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #a8a8a9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: #616163;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ── Sidebar active glow ─────────────────────────────── */
+.sidebar-active-item {
+  background: linear-gradient(135deg, rgba(213, 171, 0, 0.9) 0%, rgba(189, 150, 2, 0.9) 100%);
+  box-shadow: 0 4px 20px rgba(213, 171, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  color: #0a0a0a;
+}
+
+/* ── Premium input field ─────────────────────────────── */
+.input-premium {
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(26, 26, 26, 0.8);
+  padding: 0 16px;
+  font-size: 14px;
+  color: #f5f5f5;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  width: 100%;
+}
+
+.input-premium:focus {
+  border-color: rgba(250, 221, 83, 0.45);
+  box-shadow: 0 0 0 3px rgba(250, 221, 83, 0.07);
+}
+
+.input-premium:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Thread/list item ────────────────────────────────── */
+.list-item-dark {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: rgba(26, 26, 26, 0.5);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.list-item-dark:hover {
+  background: rgba(26, 26, 26, 0.9);
+  border-color: rgba(250, 221, 83, 0.12);
+}
+
+/* ── Status badge ────────────────────────────────────── */
+.badge-completed {
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.badge-in-progress {
+  background: rgba(96, 165, 250, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+}
+
+.badge-pending {
+  background: rgba(250, 221, 83, 0.1);
+  color: #FADD53;
+  border: 1px solid rgba(250, 221, 83, 0.2);
 }
