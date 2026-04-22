@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  extensions = [pgvector(map: "vector")]
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  filename  String
+  createdAt DateTime @default(now())
+  chunks    Chunk[]
+}
+
+model Chunk {
+  id         String   @id @default(uuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  content    String
+  vector     Unsupported("vector(768)")?
+  metadata   Json?
+}
+
+model Feedback {
+  id            String   @id @default(uuid())
+  userId        String   @default("anonymous")
+  trustScore    Float    @default(1.0)
+  claim         String
+  aiDecision    String
+  aiSuggestion  String
+  userAction    String   @default("PENDING")
+  userFinalText String?
+  isValidated   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+}
+
+model ConfigHistory {
+  id              String   @id @default(uuid())
+  version         Int      @default(1)
+  numericThreshold Float
+  conceptThreshold Float
+  reason          String
+  performanceDelta Float?
+  appliedAt       DateTime @default(now())
+}
+
+model SystemConfig {
+  id              String   @id @default(uuid())
+  version         Int      @unique
+  environment     String   @default("STAGING") // PRODUCTION | CANARY | STAGING
+  numericThreshold Float
+  conceptThreshold Float
+  isActive        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}
